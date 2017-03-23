@@ -36,7 +36,7 @@ ul, ol {
 }
 
 strong {
-	color: #1E4773;
+	color: #006978;
 }
 
 input {
@@ -78,32 +78,32 @@ p img {
 }
 
 a {
-	color: #1E4773;
+	color: #006978;
 }
 
 a:hover {
 	opacity: 0.8;
 }
 a.link {
-	color: #1E4773;
+	color: #006978;
 }
 a.lnkActivity {
-	color: #1E4773;
+	color: #006978;
 }
 a.link:hover {
-	color: #42B598;
+	color: #ec6607;
 }
 a.lnkActivity:hover {
-	color: #42B598;
+	color: #ec6607;
 }
 a.infoLink {
-	color: #1E4773;
+	color: #006978;
 	text-decoration: none;
-	border-bottom:1px dotted #1E4773
+	border-bottom:1px dotted #006978
 }
 a.infoLink:hover {
-	color: #42B598;
-	border-bottom:1px dotted #42B598
+	color: #ec6607;
+	border-bottom:1px dotted #ec6607
 }
 
 .acronym_ul::before, .term_ul::before, .book_ul::before {
@@ -119,35 +119,35 @@ q::before, q::after {
 }
 
 #header button:focus {
-	outline: 2px dotted #42B598;
+	outline: 2px dotted #ec6607;
 }
 
 #header a:focus {
-	outline: 2px dotted #42B598;
+	outline: 2px dotted #ec6607;
 }
 
 #footer button:focus {
-	outline: 2px dotted #42B598;
+	outline: 2px dotted #ec6607;
 }
 
 #footer a:focus {
-	outline: 2px dotted #42B598;
+	outline: 2px dotted #ec6607;
 }
 
 #content button:focus {
-	outline: 2px dotted #42B598;
+	outline: 2px dotted #ec6607;
 }
 
 #content a:focus {
-	outline: 2px dotted #42B598;
+	outline: 2px dotted #ec6607;
 }
 
 #outline button:focus {
-	outline: 2px dotted #42B598;
+	outline: 2px dotted #ec6607;
 }
 
 #outline a:focus {
-	outline: 2px dotted #42B598;
+	outline: 2px dotted #ec6607;
 }
 
 .hidden {
@@ -185,7 +185,7 @@ figcaption .tooltip_a::before {
 }
 
 figcaption .tooltip_a {
-	background-color: #1E4773;
+	background-color: #00343c;
 	cursor: pointer;
 	display: inline-block;
 	height: 1.36em;
@@ -195,7 +195,7 @@ figcaption .tooltip_a {
 }
 
 figcaption .tooltip_a:hover {
-	background-color: #42B598;
+	background-color: #ec6607;
 }
 figcaption .tooltip_a:hover::before {
 	color: #FFFFFF;
@@ -234,7 +234,7 @@ body.default .root {
 }
 
 body.default #header {
-	background-color: #3E90E6;
+	background-color: #006978;
 	color: #FFFFFF;
 	position: relative;
 	flex: 0 0 auto;
@@ -302,7 +302,7 @@ body.default #footer {
 	display: flex;
 	flex-direction: row;
 	flex: 0 0 auto;
-	background-color: #3E90E6;
+	background-color: #006978;
 	color: #FFFFFF;
 	padding: 1em;
 	line-height: 1em;
@@ -329,12 +329,12 @@ body.default #footer .madeWith {
 body.default #outline {
 	flex: 0 0 250px;
 	order: 1;
-	background-color: #F0F7FD;
+	background-color: #CCE1E4;
 	display: flex;
 	flex-direction: column;
 }
 body.default #outline a{
-	color: #3E90E6;
+	color: #006978;
 }
 
 body.floatMenu #outline {
@@ -393,7 +393,7 @@ body.default #content > section {
 
 /* program */
 body.program .presentation::before {
-	color: #1E4773;
+	color: #006978;
 	content: "\e80A";
 	display: inline-block;
 	font-family: "fontello";
@@ -403,7 +403,7 @@ body.program .presentation::before {
 	top: -2px;
 }
 body.program .progress::before {
-	color: #1E4773;
+	color: #006978;
 	content: "\e80A";
 	display: inline-block;
 	font-family: "fontello";
@@ -459,7 +459,7 @@ body.login #header h1 {
 
 body.login #content > section.login {
 	margin: 20% 20% 0;
-	border: 1px solid #3E90E6;
+	border: 1px solid #006978;
 	border-radius: 1em;
 	overflow: hidden;
 	background-color: #FFFFFF;
@@ -467,7 +467,7 @@ body.login #content > section.login {
 }
 
 body.login #content .login_ti {
-	background-color: #3E90E6;
+	background-color: #006978;
 	color: #FFFFFF;
 	margin: 0;
 	text-align: center;
@@ -488,7 +488,7 @@ body.login #loginMessage {
 }
 
 body.login #main {
-	background-color: #F0F7FD;
+	background-color: #bfd9dd;
 }
 
 body.login div.loginControls {
@@ -497,7 +497,7 @@ body.login div.loginControls {
 
 /* menu */
 button.backBtn {
-	background-color: #1E4773;
+	background-color: #00343c;
 	border: medium none;
 	cursor: pointer;
 	display: block;
@@ -507,7 +507,7 @@ button.backBtn {
 	width: 50px;
 }
 button.menuBtn {
-	background-color: #1E4773;
+	background-color: #00343c;
 	border: medium none;
 	cursor: pointer;
 	display: block;
@@ -517,7 +517,7 @@ button.menuBtn {
 	width: 50px;
 }
 body.showMenu button.menuBtn:hover {
-	background-color: #1E4773;
+	background-color: #00343c;
 	border: medium none;
 	cursor: pointer;
 	display: block;
@@ -527,7 +527,7 @@ body.showMenu button.menuBtn:hover {
 	width: 50px;
 }
 button.infoBtn {
-	background-color: #1E4773;
+	background-color: #00343c;
 	border: medium none;
 	cursor: pointer;
 	display: block;
@@ -537,7 +537,7 @@ button.infoBtn {
 	width: 50px;
 }
 .showInfo button.infoBtn:hover {
-	background-color: #1E4773;
+	background-color: #00343c;
 	border: medium none;
 	cursor: pointer;
 	display: block;
@@ -547,19 +547,19 @@ button.infoBtn {
 	width: 50px;
 }
 button.backBtn:hover {
-	background-color: #42B598;
+	background-color: #ec6607;
 }
 body.showMenu button.menuBtn {
-	background-color: #42B598;
+	background-color: #ec6607;
 }
 body.hideMenu button.menuBtn:hover {
-	background-color: #42B598;
+	background-color: #ec6607;
 }
 .showInfo button.infoBtn {
-	background-color: #42B598;
+	background-color: #ec6607;
 }
 button.infoBtn:hover {
-	background-color: #42B598;
+	background-color: #ec6607;
 }
 
 button.backBtn,
@@ -724,8 +724,8 @@ body.program header.meta em, .activityBlock_desc em {
 
 h2.section_ti {
 	text-transform: uppercase;
-	border-bottom: 4px solid #1E4773;
-	color: #1E4773;
+	border-bottom: 4px solid #006978;
+	color: #006978;
 }
 
 a.anchor {
@@ -754,7 +754,7 @@ a.anchor {
 }
 
 #outline li {
-	color: #3E90E6;
+	color: #006978;
 	margin: 0.5em 0;
 }
 
@@ -788,13 +788,13 @@ a.anchor {
 }
 
 .outline .outlineSelect_yes > .outlineLabel {
-	background-color: #D4EEEF;
-	border-right: 2px solid #42B598;
+	background-color: #dbd9cf;
+	border-right: 2px solid #ec6607;
 }
 
 .pageOutline .currentSection_yes {
-	background-color: #D4EEEF;
-	border-right: 2px solid #42B598;
+	background-color: #dbd9cf;
+	border-right: 2px solid #ec6607;
 }
 
 .outline .outlineSelect_yes .pageOutline > ul {
@@ -883,36 +883,36 @@ button.mnuSrlUpBtn::before {
 	font-family: "fontello";
 	font-size: 3em;
 	line-height: 25px;
-	color: #3E90E6;
+	color: #006978;
 }
 
 .btnOff button.mnuSrlUpBtn:hover::before {
 	font-family: "fontello";
 	font-size: 3em;
 	line-height: 25px;
-	color: #3E90E6;
+	color: #006978;
 }
 
 button.mnuSrlDwnBtn::before {
 	font-family: "fontello";
 	font-size: 3em;
 	line-height: 25px;
-	color: #3E90E6;
+	color: #006978;
 }
 
 .btnOff button.mnuSrlDwnBtn:hover::before {
 	font-family: "fontello";
 	font-size: 3em;
 	line-height: 25px;
-	color: #3E90E6;
+	color: #006978;
 }
 
 button.mnuSrlUpBtn:hover::before {
-	color: #42B598;
+	color: #ec6607;
 }
 
 button.mnuSrlDwnBtn:hover::before {
-	color: #42B598;
+	color: #ec6607;
 }
 
 button.mnuSrlUpBtn::before {
@@ -953,21 +953,21 @@ button.mnuSrlUpBtn > span, button.mnuSrlDwnBtn > span {
 }
 
 .cbkOpenBtn {
-	background-color: #1E4773;
+	background-color: #00343c;
 	border: medium none;
 	cursor: pointer;
 	margin: 4px;
 }
 
 .cbkCloseBtn {
-	background-color: #1E4773;
+	background-color: #00343c;
 	border: medium none;
 	cursor: pointer;
 	margin: 4px;
 }
 
 .sldModeBtn {
-	background-color: #1E4773;
+	background-color: #00343c;
 	border: medium none;
 	cursor: pointer;
 	margin: 4px;
@@ -994,19 +994,19 @@ button.mnuSrlUpBtn > span, button.mnuSrlDwnBtn > span {
 }
 
 .cbkOpenBtn:hover {
-	background-color: #42B598;
+	background-color: #ec6607;
 }
 
 .cbkCloseBtn:hover {
-	background-color: #42B598;
+	background-color: #ec6607;
 }
 
 .sldModeBtn:hover {
-	background-color: #42B598;
+	background-color: #ec6607;
 }
 
 body.sldMode .sldModeBtn {
-	background-color: #42B598;
+	background-color: #ec6607;
 }
 .cbkOpenBtn:hover > span {
 	color: #FFFFFF;
@@ -1019,22 +1019,22 @@ body.sldMode .sldModeBtn {
 }
 
 body.sldMode .cbkOpenBtn {
-	background-color: #9BC8F2;
+	background-color: #A3C9CF;
 	cursor: default;
 }
 
 body.sldMode .cbkCloseBtn {
-	background-color: #9BC8F2;
+	background-color: #A3C9CF;
 	cursor: default;
 }
 
 body.sldMode .cbkOpenBtn:hover {
-	background-color: #9BC8F2;
+	background-color: #A3C9CF;
 	cursor: default;
 }
 
 body.sldMode .cbkCloseBtn:hover {
-	background-color: #9BC8F2;
+	background-color: #A3C9CF;
 	cursor: default;
 }
 body.sldMode .cbkOpenBtn > span {
@@ -1067,7 +1067,7 @@ body.default #outline > .toolBar li {
 
 body.default #outline > .toolBar a {
 	display: block;
-	background-color: #1E4773;
+	background-color: #00343c;
 	color:  #FFFFFF;
 	border: medium none;
 	margin: 4px 4px 0;
@@ -1080,7 +1080,7 @@ body.richStreamActivity #outline > .toolBar a {
 }
 
 body.default #outline > .toolBar a:hover {
-	background-color: #42B598;
+	background-color: #ec6607;
 	color:  #FFFFFF;
 }
 
@@ -1090,7 +1090,7 @@ body.default #outline > .toolBar a:hover {
 }
 
 .block::before {
-	background-color: #3E90E6;
+	background-color: #006978;
 	border-radius: 1em;
 	color: #FFFFFF;
 	font-family: "fontello";
@@ -1105,7 +1105,7 @@ body.default #outline > .toolBar a:hover {
 }
 
 .profInstruction::before {
-	background-color: #3E90E6;
+	background-color: #006978;
 	border-radius: 1em;
 	color: #FFFFFF;
 	font-family: "fontello";
@@ -1120,7 +1120,7 @@ body.default #outline > .toolBar a:hover {
 }
 
 .studentInstruction::before {
-	background-color: #3E90E6;
+	background-color: #006978;
 	border-radius: 1em;
 	color: #FFFFFF;
 	font-family: "fontello";
@@ -1135,55 +1135,55 @@ body.default #outline > .toolBar a:hover {
 }
 
 .warning {
-	border-left: 3px solid #97C8F3;
+	border-left: 3px solid #bfd9dd;
 	margin: 0 0 1.5em 3em;
 	padding-left: 0.5em;
 }
 
 .rule {
-	border-left: 3px solid #97C8F3;
+	border-left: 3px solid #bfd9dd;
 	margin: 0 0 1.5em 3em;
 	padding-left: 0.5em;
 }
 
 .extra {
-	border-left: 3px solid #97C8F3;
+	border-left: 3px solid #bfd9dd;
 	margin: 0 0 1.5em 3em;
 	padding-left: 0.5em;
 }
 
 .method {
-	border-left: 3px solid #97C8F3;
+	border-left: 3px solid #bfd9dd;
 	margin: 0 0 1.5em 3em;
 	padding-left: 0.5em;
 }
 
 .reminder {
-	border-left: 3px solid #97C8F3;
+	border-left: 3px solid #bfd9dd;
 	margin: 0 0 1.5em 3em;
 	padding-left: 0.5em;
 }
 
 .hypothesis {
-	border-left: 3px solid #97C8F3;
+	border-left: 3px solid #bfd9dd;
 	margin: 0 0 1.5em 3em;
 	padding-left: 0.5em;
 }
 
 .advice {
-	border-left: 3px solid #97C8F3;
+	border-left: 3px solid #bfd9dd;
 	margin: 0 0 1.5em 3em;
 	padding-left: 0.5em;
 }
 
 .example {
-	border-left: 3px solid #97C8F3;
+	border-left: 3px solid #bfd9dd;
 	margin: 0 0 1.5em 3em;
 	padding-left: 0.5em;
 }
 
 .definition {
-	border-left: 3px solid #97C8F3;
+	border-left: 3px solid #bfd9dd;
 	margin: 0 0 1.5em 3em;
 	padding-left: 0.5em;
 }
@@ -1191,70 +1191,70 @@ body.default #outline > .toolBar a:hover {
 .warning .block_ti {
 	font-size: 1.2em;
 	margin: 0.5em 0;
-	color: #73A9EF;
+	color: #006978;
 	font-weight: normal;
 }
 
 .rule .block_ti {
 	font-size: 1.2em;
 	margin: 0.5em 0;
-	color: #73A9EF;
+	color: #006978;
 	font-weight: normal;
 }
 
 .extra .block_ti {
 	font-size: 1.2em;
 	margin: 0.5em 0;
-	color: #73A9EF;
+	color: #006978;
 	font-weight: normal;
 }
 
 .method .block_ti {
 	font-size: 1.2em;
 	margin: 0.5em 0;
-	color: #73A9EF;
+	color: #006978;
 	font-weight: normal;
 }
 
 .reminder .block_ti {
 	font-size: 1.2em;
 	margin: 0.5em 0;
-	color: #73A9EF;
+	color: #006978;
 	font-weight: normal;
 }
 
 .hypothesis .block_ti {
 	font-size: 1.2em;
 	margin: 0.5em 0;
-	color: #73A9EF;
+	color: #006978;
 	font-weight: normal;
 }
 
 .advice .block_ti {
 	font-size: 1.2em;
 	margin: 0.5em 0;
-	color: #73A9EF;
+	color: #006978;
 	font-weight: normal;
 }
 
 .example .block_ti {
 	font-size: 1.2em;
 	margin: 0.5em 0;
-	color: #73A9EF;
+	color: #006978;
 	font-weight: normal;
 }
 
 .definition .block_ti {
 	font-size: 1.2em;
 	margin: 0.5em 0;
-	color: #73A9EF;
+	color: #006978;
 	font-weight: normal;
 }
 
 .info .info_ti {
 	font-size: 1.2em;
 	margin: 0.5em 0;
-	color: #73A9EF;
+	color: #006978;
 	font-weight: normal;
 }
 .block_ti i {
@@ -1298,7 +1298,7 @@ body.default #outline > .toolBar a:hover {
 }
 
 .profInstruction {
-	border-left: 2px solid #2968AD;
+	border-left: 2px solid #0c9ef1;
 	margin: 0 0 1.5em 3.5em;
 	padding-left: 0.5em;
 	position: relative;
@@ -1306,7 +1306,7 @@ body.default #outline > .toolBar a:hover {
 }
 
 .studentInstruction {
-	border-left: 2px solid #2968AD;
+	border-left: 2px solid #0c9ef1;
 	margin: 0 0 1.5em 3.5em;
 	padding-left: 0.5em;
 	position: relative;
@@ -1314,7 +1314,7 @@ body.default #outline > .toolBar a:hover {
 }
 
 .studentInstruction {
-	border-color: #41B497;
+	border-color: #ec6608;
 }
 
 .studentInstruction::before, .profInstruction::before {
@@ -1323,13 +1323,13 @@ body.default #outline > .toolBar a:hover {
 }
 
 .profInstruction::before {
-	background-color: #2968AD;
+	background-color: #0c9ef1;
 	color: #FFFFFF;
 	left: -2.7em;
 }
 
 .studentInstruction::before {
-	background-color: #41B497;
+	background-color: #ec6608;
 	color: #FFFFFF;
 	font-size: 1.1em;
 	left: -3.2em;
@@ -1348,7 +1348,7 @@ body.default #outline > .toolBar a:hover {
 .visavis > .first {
 	margin-right: 0.5em;
 	padding-right: 0.5em;
-	border-right: 1px solid #1E4773;
+	border-right: 1px solid #006978;
 }
 
 .visavis.half-half > .first {
@@ -1387,7 +1387,7 @@ body.default #outline > .toolBar a:hover {
 }
 
 .section.collapsed .section_ti {
-	background-color: #9BC8F2;
+	background-color: #c3d3d4;
 	border: medium none;
 	margin: 0;
 	padding: 0.5em 1em;
@@ -1404,19 +1404,19 @@ body.default #outline > .toolBar a:hover {
 .section_closed {
 	display: block;
 	text-decoration: none;
-	color: #1F4973;
+	color: #006978;
 	padding-right: 20px;
 }
 
 .section_open {
 	display: block;
 	text-decoration: none;
-	color: #1F4973;
+	color: #006978;
 	padding-right: 20px;
 }
 
 .section_ti .section_closed {
-	color: #1F4973;
+	color: #006978;
 	margin: 0;
 }
 
@@ -1447,7 +1447,7 @@ body.default #outline > .toolBar a:hover {
 .colBlockTgleBtn {
 	text-decoration: none;
 	color: #FFFFFF;
-	background-color: #1E4773;
+	background-color: #00343c;
 	padding: 5px;
 	line-height: 50px;
 }
@@ -1478,7 +1478,7 @@ body.program .collBlk_closed > a.colBlockTgleBtn > span.labelOpen {
 }
 
 *:target {
-	background-color: #D4EEEF !important;
+	background-color: #dbd9cf !important;
 }
 
 #outline:target,
@@ -1491,13 +1491,13 @@ body.program .collBlk_closed > a.colBlockTgleBtn > span.labelOpen {
 
 .studentArea > textarea {
 	background-color: #F8F8F8;
-	border: 1px solid #F0F7FD;
-	color: #1E4773;
+	border: 1px solid #bfd9dd;
+	color: #006978;
 }
 
 /* TOOLTIP */
 .tooltip_act {
-	background-color: #F0F7FD;
+	background-color: #bfd9dd;
 }
 
 .tooltip {
@@ -1510,7 +1510,7 @@ body.program .collBlk_closed > a.colBlockTgleBtn > span.labelOpen {
 .tooltip_ti {
 	font-size: 1.2em;
 	padding: 2px 25px 2px 5px;
-	background-color: #3E90E6;
+	background-color: #006978;
 	color: #FFFFFF;
 	border-radius: 5px 5px 0 0;
 }
@@ -1560,7 +1560,7 @@ body.program .session > .section_ti a::before {
 }
 
 body.program .collapsed {
-	background-color: #F0F7FD;
+	background-color: #e9e9e9;
 }
 
 body.program .collapsed .collapsed {
@@ -1568,7 +1568,7 @@ body.program .collapsed .collapsed {
 }
 
 body.program .collapsed .collapsed .collapsed {
-	background-color: #F0F7FD;
+	background-color: #e9e9e9;
 }
 
 body.program .collapsed .collapsed .collapsed .collapsed {
@@ -1584,8 +1584,8 @@ body.program .period > .section_ti a::before {
 }
 
 body.program .activity .section_ti {
-	border-bottom: 2px solid #1E4773;
-	color: #1E4773;
+	border-bottom: 2px solid #006978;
+	color: #006978;
 	margin: 0.5em 0;
 	padding: 0.5em 0 0.2em;
 }
@@ -1675,8 +1675,8 @@ body.quiz #navigation {
 
 body.quiz #header h1 {
 	text-transform: uppercase;
-	border-bottom: 4px solid #1E4773;
-	color: #1E4773;
+	border-bottom: 4px solid #006978;
+	color: #006978;
 	font-size: 1.3em;
 }
 
@@ -1732,13 +1732,13 @@ body.quiz #navigation > .btnNav.none {
 
 /*	NAVIGATION	*/
 #navigation .evalCounter {
-	color: #1E4773;
+	color: #006978;
 	font-size: 1.5em;
 	font-weight: bold;
 }
 
 #navigation .btnNav {
-	background-color: #1E4773;
+	background-color: #00343c;
 	color: #FFFFFF;
 	padding: 5px;
 	text-decoration: none;
@@ -1746,7 +1746,7 @@ body.quiz #navigation > .btnNav.none {
 }
 
 body.richStreamActivity .quizListStep a.next {
-	background-color: #1E4773;
+	background-color: #00343c;
 	color: #FFFFFF;
 	padding: 5px;
 	text-decoration: none;
@@ -1763,7 +1763,7 @@ body.richStreamActivity .quizListStep a.next {
 }
 
 #navigation .btnNav:hover {
-	background-color: #42B598;
+	background-color: #ec6607;
 	color: #FFFFFF;
 	opacity:1;
 }
@@ -1782,13 +1782,13 @@ body.richStreamActivity .quizListStep a.next {
 
 /* --- GENERAL STYLES ------------------------------------------------------- */
 .exercice {
-	border-left: 2px solid #1E4773;
+	border-left: 2px solid #006978;
 	border-radius: 5px;
 	padding-left: 10px;
 }
 
 .exercice_ti {
-	color: #1E4773;
+	color: #006978;
 }
 
 .quizBody {
@@ -1830,7 +1830,7 @@ body.richStreamActivity .quizListStep a.next {
 }
 
 .toolbar {
-	background-color: #F0F7FD;
+	background-color: #bfd9dd;
 	display: flex;
 }
 
@@ -1859,12 +1859,12 @@ body.richStreamActivity .quizListStep a.next {
 	padding-left: 10px;
 	padding-right: 10px;
 	text-align: center;
-	color: #1E4773;
+	color: #006978;
 }
 
 .btnQuiz:hover {
-	background-color: #1E4773;
-	color: #F0F7FD;
+	background-color: #006978;
+	color: #bfd9dd;
 }
 
 .btnQuiz span::before {
@@ -2021,8 +2021,8 @@ div.choiceList_la p {
 }
 
 .mtTdArrow::before {
-	background-color: #1E4773;
-	color: #F0F7FD;
+	background-color: #006978;
+	color: #bfd9dd;
 	border-radius: 15px;
 	font-family: "fontello";
 	font-size: 20px;
@@ -2030,8 +2030,8 @@ div.choiceList_la p {
 }
 
 .ddDropContIfEmpty::before {
-	background-color: #1E4773;
-	color: #F0F7FD;
+	background-color: #006978;
+	color: #bfd9dd;
 	border-radius: 15px;
 	font-family: "fontello";
 	font-size: 20px;
@@ -2089,11 +2089,11 @@ div.choiceList_la p {
 }
 
 .ddBasketCatch {
-	border: 1px solid #1E4773;
+	border: 1px solid #006978;
 }
 
 .ddDropCatch {
-	border: 1px solid #1E4773;
+	border: 1px solid #006978;
 }
 
 .ddBasketCont, .ddDropCont {
@@ -2117,7 +2117,7 @@ div.choiceList_la p {
 
 .ddDropTi {
 	font-weight: bold;
-	background-color: #3E90E6;
+	background-color: #006978;
 	color: #FFFFFF;
 	text-align: center;
 }
@@ -2163,10 +2163,10 @@ div.choiceList_la p {
 
 /*Survol des paniers */
 .ddBasketDragOver {
-	background-color: #F0F7FD;
+	background-color: #bfd9dd;
 }
 .ddCatchDragOver {
-	background-color: #F0F7FD;
+	background-color: #bfd9dd;
 }
 
 /*Fin du panier*/
@@ -2226,13 +2226,13 @@ div.choiceList_la p {
 }
 
 .exoInput {
-	border: 1px solid #1E4773;
+	border: 1px solid #006978;
 	border-radius: 3px;
 	font-size: 0.9em;
 }
 
 .gapInput {
-	border: 1px solid #1E4773;
+	border: 1px solid #006978;
 	border-radius: 3px;
 	font-size: 0.9em;
 }
@@ -2251,8 +2251,8 @@ div.choiceList_la p {
 }
 
 .gapInput[disabled] {
-	color: #1E4773;
-	background-color: #F0F7FD;
+	color: #006978;
+	background-color: #bfd9dd;
 }
 
 .gapAnswer {
@@ -2503,7 +2503,7 @@ div.choiceList_la p {
 
 /* --- LISTE DE QUIZ -------------------------------------------------------- */
 .subQuestion .block_ti {
-	color: #1E4773;
+	color: #006978;
 	margin-bottom: 0;
 }
 
@@ -2582,26 +2582,26 @@ div.choiceList_la p {
 }
 
 .scImgGalFra {
-	background-color: #F0F7FD;
+	background-color: #bfd9dd;
 }
 
 .scImgGalCo {
-	background-color: #F0F7FD;
+	background-color: #bfd9dd;
 }
 
 .scImgGalImgFra {
-	background-color: #F0F7FD;
+	background-color: #bfd9dd;
 }
 
 .scImgGalTi {
 	font-style: italic;
-	color: #1E4773;
+	color: #006978;
 	cursor: default;
 }
 
 .scImgGalTbr span.scImgGalCount {
 	font-style: italic;
-	color: #1E4773;
+	color: #006978;
 	cursor: default;
 }
 
@@ -2615,11 +2615,11 @@ div.choiceList_la p {
 	bottom: 3px;
 	text-decoration: none;
 	left: 50%;
-	color: #1E4773;
+	color: #00343c;
 }
 
 .scImgGalTbr a:hover {
-	color: #42B598;
+	color: #ec6607;
 }
 
 .scImgGalTbr a::before {
@@ -2668,8 +2668,8 @@ a.scImgGalBtnPly::before {
 }
 
 .scImgZmTi {
-	background-color: #F0F7FD;
-	color: #1E4773;
+	background-color: #bfd9dd;
+	color: #006978;
 	font-style: italic;
 	text-align: center;
 }
@@ -2687,15 +2687,15 @@ a.scImgGalBtnPly::before {
 
 /*	ACTIVITY BLOCK	*/
 .activityBlock {
-	background-color: #F0F7FD;
+	background-color: #e9e9e9;
 	display: flex;
 	flex-direction: column;
 	margin: 1em 0;
 }
 
 .activityBlock_ti {
-	background-color: #9BC8F2;
-	color: #1F4973;
+	background-color: #c3d3d4;
+	color: #006978;
 	margin: 0;
 	padding: 0.5em 1em;
 }
@@ -2715,13 +2715,13 @@ a.scImgGalBtnPly::before {
 }
 
 .activityBlock_ti .lnkActivity::after {
-	color: #1E4773;
+	color: #006978;
 	content: " \e812";
 	float: right;
 	font-family: "fontello";
 }
 .lnkActivity:hover::after {
-	color: #42B598;
+	color: #ec6607;
 }
 .activityBlock_co {
 	margin: 0 0.6em 0.6em 0.6em;
@@ -2825,10 +2825,10 @@ section.teContainer > div > section.segment > h3 {
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	overflow: hidden;
-	border: 1px solid #1E4773;
+	border: 1px solid #006978;
 	border-radius: 5px;
 	text-transform: uppercase;
-	color: #1E4773;
+	color: #006978;
 	padding: 0.5em 1em;
 	margin: 0;
 }
@@ -2953,7 +2953,7 @@ div.timelines {
 	display: flex;
 	margin-top: 0.2em;
 	min-height: 0;
-	border: solid 1px #1E4773;
+	border: solid 1px #006978;
 }
 
 ul.teTimeline {
@@ -3050,18 +3050,18 @@ div.times > * {
 	flex: 1;
 	align-items: center;
 	justify-content: center;
-	color: #1E4773;
+	color: #006978;
 }
 
 span.teDuration {
-	border-top: solid 1px #1E4773;
+	border-top: solid 1px #006978;
 }
 
 nav.teController input[type=range] {
 	display: block;
-	border: solid 1px #1E4773;
+	border: solid 1px #006978;
 	background-color: #f2f2f2;
-	color: #1E4773;
+	color: #006978;
 	padding: 0;
 	margin: 0;
 }
@@ -3088,14 +3088,14 @@ nav.teController button > span {
 nav.teController button::before {
 	font-family: 'fontello';
 	font-size: 1.5em;
-	color: #1E4773;
+	color: #00343c;
 }
 
 nav.teController button:hover {
 	cursor: pointer;
 }
 nav.teController button:hover::before {
-	color: #42B598;
+	color: #ec6607;
 }
 
 button.tePlayPause::before {
@@ -3188,7 +3188,7 @@ ps-loading-spinner {
 	width: 40px;
 	height: 40px;
 	position: relative;
-	border: 4px solid #1E4773;
+	border: 4px solid #006978;
 	animation: ps-spinner 2.3s infinite ease;
 
 	position: absolute;
@@ -3203,7 +3203,7 @@ ps-loading-spinner::before {
 	display: block;
 	vertical-align: top;
 	width: 100%;
-	background-color: #1E4773;
+	background-color: #006978;
 	animation: ps-spinner-inner 2.3s infinite ease-in;
 }
 
@@ -3292,11 +3292,11 @@ ps-loading-spinner::before {
 	}
 
 	.profInstruction::before {
-		color: #2968AD;
+		color: #0c9ef1;
 	}
 
 	.studentInstruction::before {
-		color: #41B497;
+		color: #ec6608;
 	}
 
 	.profInstruction, .studentInstruction {
