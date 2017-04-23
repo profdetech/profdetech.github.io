@@ -628,9 +628,10 @@ var scTooltipMgr = {
 			if (this.xHasAttr(vBskt, "data-titled-basket")) vBskt = vBskt.parentNode;
 			var vEmpty = true;
 			for(var i = 0; i < vBsktElts.length; i++) if (vBsktElts[i].nodeType==1 && !vBsktElts[i].ttIds) {vEmpty = false; break;} 
-			if (this.fHideBasket && vEmpty) vBskt.style.display = "none";
-			else vBskt.className = vBskt.className + " " + this.fRegCls;
-			
+			if (vEmpty){
+				if (this.fHideBasket) vBskt.style.display = "none";
+				else vBskt.className = vBskt.className + " " + this.fRegCls;
+			}
 		} catch(e){
 			scCoLib.log("scTooltipMgr.registerTooltip - error : "+e);
 		}
