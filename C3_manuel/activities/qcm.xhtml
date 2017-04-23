@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html lang="fr" xml:lang="fr" xmlns="http://www.w3.org/1999/xhtml">
+ <!--
+							standard : XHTML 5
+							dialog : /@\C3_SDC\6\MOT-2a\entrainement.activite;_AnavQuiz/@\C3_SDC\6\MOT-2a\entrainement.activite;_AnavQuiz/_Nd_\C3_SDC\6\MOT-2a\entrainement.activite;10--><head>
+  <meta http-equiv="x-ua-compatible" content="IE=EDGE" />
+  <title>Le choix</title>
+  <meta charset="UTF-8" />
+  <meta name="generator" content="SCENARI 4.2.103 / canoprof 1.0.128" />
+  <meta name="revision" content="2017-04-23 20:10" />
+  <link rel="start" href="../index.xhtml" title="Manuel cycle 3" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" type="text/css" href="../lib-md/w_scImgMgr/scImgMgr.css" />
+  <script type="text/JavaScript"><![CDATA[
+/*0*/ var scServices = {id:"j1v4o8er"};
+/*1*/ window.scLoadParams = {destUri:"/activities/qcm.xhtml", pathToRoot:"../"};
+]]></script>
+  <!--[if lt IE 9]><script type="text/JavaScript" src="../lib-md/w_html5shiv/html5shiv.js"></script><![endif]--><script type="text/JavaScript" src="../lib-sc/scCoLib.js" />
+  <script type="text/JavaScript" src="../lib-sc/scTiLib.js" />
+  <script type="text/JavaScript" src="../lib-sc/scSiLib.js" />
+  <script type="text/JavaScript" src="../lib-sc/scPaLib.js" />
+  <script type="text/JavaScript" src="../lib-sc/scTooltipMgr.js" />
+  <script type="text/JavaScript" src="../lib-sc/scDynUiMgr.js" />
+  <script type="text/JavaScript" src="../lib-sc/scMapMgr.js" />
+  <script type="text/JavaScript" src="../lib-sc/scDragMgr.js" />
+  <script type="text/JavaScript" src="../lib-sc/scAssmntMgr.js" />
+  <script type="text/JavaScript" src="../lib-md/w_mathjax/mathjaxMgr.js" />
+  <script type="text/JavaScript" src="../lib-md/w_tplMgr/tplMgr.js" />
+  <script type="text/JavaScript" src="../lib-md/w_scMediaMgr/scMediaMgr.js" />
+  <script type="text/JavaScript" src="../lib-md/w_scImgMgr/scImgMgr.js" />
+  <script type="text/JavaScript" src="../lib-md/w_postscriptum/postscriptumMgr.js" />
+  <script type="text/JavaScript"><![CDATA[
+/*0*/ try{if(window.opener && window.opener.scServices && window.opener.scServices.id == scServices.id) scServices = window.opener.scServices; else if(window.parent && window.parent.scServices && window.parent.scServices.id == scServices.id) scServices = window.parent.scServices;}catch(e){}
+scImgMgr.registerAdaptedImage("ide:content/des:img.adapted");
+
+scImgMgr.registerZoom("des:a.zoom",{toolbar:1,mag:1,titlePath:"par:/nsi:/des:span.title"});
+
+]]></script>
+  <script type="text/JavaScript"><![CDATA[scCoLib.fDebug = true;]]></script>
+  <link type="text/css" rel="stylesheet" href="../skin/skin.css" media="all" />
+  <link type="text/css" rel="stylesheet" href="../skin/quiz.css" media="all" />
+  <link type="text/css" rel="stylesheet" href="../skin/player.css" media="all" />
+  <link type="text/css" rel="stylesheet" href="../skin/print.css" media="print" />
+  <script type="text/javascript">
+	scImgMgr.registerGallery(&quot;des:div.galFra&quot;, {maxWidth:850,maxHeight:700});
+</script></head>
+ <body class="quiz genType-stud">
+  <div class="root"><header id="header" role="banner"><ul id="accessibility"><li class="waiContent"><a href="#content"><span>contenu</span></a></li><li class="waiNav"><a href="#navigation"><span>navigation</span></a></li></ul><h1><span>Le choix</span></h1><hr class="hidden" /></header><main id="main" role="main"><div id="content"><script type="text/JavaScript"><![CDATA[
+var NIMRmEsOiHks6fajkFbYue_Aeval = {
+
+	fId : "NIMRmEsOiHks6fajkFbYue",
+	fCurSeq : null,
+	initSeq : function(pCodeSeq){
+	try {
+		if(pCodeSeq==null) return;
+		if(this.fCurSeq!=null) this.closeSeq();
+		this.fCurSeq = pCodeSeq;
+		switch(this.fCurSeq) {
+
+		case "init" : {
+		var vForm = document.forms.NIMRmEsOiHks6fajkFbYue_Aeval_form;
+		for (var i=0; i < vForm.NIMRmEsOiHks6fajkFbYue_Aeval_input.length; i++) {
+			vForm.NIMRmEsOiHks6fajkFbYue_Aeval_input[i].disabled = false;
+			vForm.NIMRmEsOiHks6fajkFbYue_Aeval_input[i].checked = false;
+		}
+
+var vLoadRespSession = "eval";
+for (var i=0; i < vForm.NIMRmEsOiHks6fajkFbYue_Aeval_input.length; i++) {
+			var vInput = vForm.NIMRmEsOiHks6fajkFbYue_Aeval_input[i];
+			vInput.checked = scServices.assmntMgr.getResponse(this.fId, vLoadRespSession, vInput.value);
+		}
+
+		this.setSolution(false);
+var vRespSession = "eval";
+		if(scServices.assmntMgr.getCompletionStatus(this.fId, vRespSession)=="notAttempt") scServices.assmntMgr.setCompletionStatus(this.fId, vRespSession, "attempt");
+		this.setResp = function(pInput, pIdx) {
+			scServices.assmntMgr.setResponse(this.fId, vRespSession, pIdx, pInput.checked);
+
+			this.computeScore();
+			scServices.assmntMgr.commit();
+		}				
+
+		this.computeScore = function() {
+
+			this.refreshScoresFeedbacks();
+		}
+
+if(vRespSession != vLoadRespSession) {
+for (var i=0; i < vForm.NIMRmEsOiHks6fajkFbYue_Aeval_input.length; i++) {
+			var vInput = vForm.NIMRmEsOiHks6fajkFbYue_Aeval_input[i];
+			scServices.assmntMgr.setResponse(this.fId, vRespSession, vInput.value, vInput.checked);
+		}
+}
+this.computeScore();
+
+		scServices.assmntMgr.commit();
+		break;
+	}
+
+		case "read" : {
+		var vForm = document.forms.NIMRmEsOiHks6fajkFbYue_Aeval_form;
+		for (var i=0; i < vForm.NIMRmEsOiHks6fajkFbYue_Aeval_input.length; i++) {
+			vForm.NIMRmEsOiHks6fajkFbYue_Aeval_input[i].disabled = true;
+			vForm.NIMRmEsOiHks6fajkFbYue_Aeval_input[i].checked = false;
+		}
+
+var vLoadRespSession = "eval";
+for (var i=0; i < vForm.NIMRmEsOiHks6fajkFbYue_Aeval_input.length; i++) {
+			var vInput = vForm.NIMRmEsOiHks6fajkFbYue_Aeval_input[i];
+			vInput.checked = scServices.assmntMgr.getResponse(this.fId, vLoadRespSession, vInput.value);
+		}
+
+		this.setSolution(false);
+this.setResp = function(pInput, pIdx) {
+
+			this.computeScore();
+			scServices.assmntMgr.commit();
+		}	
+
+		this.computeScore = function() {
+
+			this.refreshScoresFeedbacks();
+		}
+
+this.computeScore();
+
+		scServices.assmntMgr.commit();
+		break;
+	}
+
+		}
+	}catch(e){alert("failed:::"+e)};
+	},
+
+	closeSeq: function(){
+		var vForm = document.forms.NIMRmEsOiHks6fajkFbYue_Aeval_form;
+		switch(this.fCurSeq) {
+
+	case "init" : {
+
+		break;
+	}
+
+	case "read" : {
+
+		break;
+	}
+
+		}
+		this.fCurSeq = null;
+	},
+	getOnLoadSeq:function() {
+
+	if(scServices.assmntMgr.getCompletionStatus(this.fId, "eval") != "complete" && true) return "init";
+	return "read";
+	},
+
+	refreshScoresFeedbacks : function(){
+		
+
+	},
+	solIsShown : false,
+	setSolution : function(pShown){
+		var vTRs = null;
+		var vForm = document.forms.NIMRmEsOiHks6fajkFbYue_Aeval_form;
+		var vTable = scPaLib.findNode("chi:" ,vForm);
+		if (vTable.nodeName.toLowerCase()=="table") vTRs = scPaLib.findNodes("chi:/chi:tr" ,vTable);
+		else vTRs = scPaLib.findNodes("chi:" ,vTable);
+	
+		if(!pShown && this.solIsShown) {
+			for(var i=0; i<vTRs.length; i++){
+				var vTR = vTRs[i]; 
+				var vOffs = vTR.className.indexOf("assmntSol");
+				if(vOffs>=0) vTR.className = vTR.className.substring(0, vOffs) + vTR.className.substring(vOffs+14);
+
+			}
+		} else if(pShown && ! this.solIsShown) {
+
+			var i = 0, vTR = null;
+
+			vTR = vTRs[i++];
+			vTR.className = "assmntSolCheck " + vTR.className;
+
+			vTR = vTRs[i++];
+			vTR.className = "assmntSolUnche " + vTR.className;
+
+			vTR = vTRs[i++];
+			vTR.className = "assmntSolCheck " + vTR.className;
+
+			vTR = vTRs[i++];
+			vTR.className = "assmntSolCheck " + vTR.className;
+
+		}
+		this.solIsShown = pShown;
+	},
+	onLoad: function(){
+		this.initSeq(this.getOnLoadSeq()); 
+		var vNodeRoot = sc$("NIMRmEsOiHks6fajkFbYue_Aeval_A");
+		vNodeRoot.style.display = "block"; 
+	},
+	onUnload: function(){
+		this.closeSeq();
+	},
+	loadSortKey: "A",
+	unloadSortKey: "A"
+};
+
+scOnLoads[scOnLoads.length] = NIMRmEsOiHks6fajkFbYue_Aeval;
+scOnUnloads[scOnUnloads.length] = NIMRmEsOiHks6fajkFbYue_Aeval;
+]]></script><div id="NIMRmEsOiHks6fajkFbYue_Aeval_A" style="display:none;"><div class="evalBody"><div class="question"><div><h2><span>Choisir les bons objets</span></h2><div><div class="txt "><p>Dans la liste ci-dessous, sélectionne tous les objets permettant de se déplacer.</p></div></div></div></div><div class="response" aria-live="polite"><form action="" name="NIMRmEsOiHks6fajkFbYue_Aeval_form" id="NIMRmEsOiHks6fajkFbYue_Aeval_form"><ul class="choiceList "><li class="choiceList_ch "><div class="choiceList_in "><input type="checkbox" name="NIMRmEsOiHks6fajkFbYue_Aeval_input" id="NIMRmEsOiHks6fajkFbYue_Aeval_in0" value="0" onclick="NIMRmEsOiHks6fajkFbYue_Aeval.setResp(this, 0);" aria-labelledby="NIMRmEsOiHks6fajkFbYue_Aeval_lbl0" /></div><div class="choiceList_la " id="NIMRmEsOiHks6fajkFbYue_Aeval_lbl0"><div class="choice"><div class="label"><p>Un vélo</p></div></div></div></li><li class="choiceList_ch "><div class="choiceList_in "><input type="checkbox" name="NIMRmEsOiHks6fajkFbYue_Aeval_input" id="NIMRmEsOiHks6fajkFbYue_Aeval_in1" value="1" onclick="NIMRmEsOiHks6fajkFbYue_Aeval.setResp(this, 1);" aria-labelledby="NIMRmEsOiHks6fajkFbYue_Aeval_lbl1" /></div><div class="choiceList_la " id="NIMRmEsOiHks6fajkFbYue_Aeval_lbl1"><div class="choice"><div class="label"><p>Une chaise</p></div></div></div></li><li class="choiceList_ch "><div class="choiceList_in "><input type="checkbox" name="NIMRmEsOiHks6fajkFbYue_Aeval_input" id="NIMRmEsOiHks6fajkFbYue_Aeval_in2" value="2" onclick="NIMRmEsOiHks6fajkFbYue_Aeval.setResp(this, 2);" aria-labelledby="NIMRmEsOiHks6fajkFbYue_Aeval_lbl2" /></div><div class="choiceList_la " id="NIMRmEsOiHks6fajkFbYue_Aeval_lbl2"><div class="choice"><div class="label"><p>Un camion</p></div></div></div></li><li class="choiceList_ch "><div class="choiceList_in "><input type="checkbox" name="NIMRmEsOiHks6fajkFbYue_Aeval_input" id="NIMRmEsOiHks6fajkFbYue_Aeval_in3" value="3" onclick="NIMRmEsOiHks6fajkFbYue_Aeval.setResp(this, 3);" aria-labelledby="NIMRmEsOiHks6fajkFbYue_Aeval_lbl3" /></div><div class="choiceList_la " id="NIMRmEsOiHks6fajkFbYue_Aeval_lbl3"><div class="choice"><div class="label"><p>Un avion</p></div></div></div></li></ul></form></div></div></div><div class="references" /><hr class="hidden" /></div><nav id="navigation" role="navigation"><span class="evalCounter"><span class="seen">1</span><span class="over">/</span><span class="total">1</span></span><!--navUiWidget pathDialog : ""--><span class="btnNav previous none" aria-hidden="true"><span>précédent</span></span><!--navUiWidget pathDialog : "/@\C3_SDC\6\MOT-2a\entrainement.activite;_AnavQuiz/@\C3_SDC\6\MOT-2a\entrainement.activite;_AnavQuiz/_N24"--><a rel="next" href="entrainement_3.xhtml" target="_self" class="btnNav next"><span>suivant</span></a></nav></main></div>
+  <script type="text/JavaScript" src="../skin/skin.js" />
+  <script type="text/javascript"><![CDATA[tplMgr.init();scMediaMgr.init("des:.mediaPlayer",{processYoutubeUrls :true});scImgMgr.init();mathjaxMgr.init(false);]]></script></body></html>
