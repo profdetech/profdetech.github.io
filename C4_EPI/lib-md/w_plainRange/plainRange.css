@@ -1,0 +1,11 @@
+/* WebKit */
+input[type=range].plainRange { -webkit-appearance: none; }
+input[type=range].plainRange::-webkit-slider-thumb { -webkit-appearance: none; 	width: 0; }
+
+/* Firefox */
+input[type=range].plainRange::-moz-range-track { visibility: hidden; }
+input[type=range].plainRange::-moz-range-thumb { width: 0; border: none; }
+
+/* Internet Explorer */
+input[type=range].plainRange::-ms-track { opacity: 0; color: transparent; }
+input[type=range].plainRange::-ms-thumb { display: none; }
