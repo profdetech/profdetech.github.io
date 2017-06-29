@@ -1,0 +1,236 @@
+/* postcss --local-plugins -u './webSldPre.skin.doss/postcss-ps-precss/postcss-ps-precss.js' webSldPre.skin.doss/sld.css > web.skin.doss/sld.css */
+
+
+/* Désactivation de la largeur maximale pour prendre toute l'espace disponible */
+div.root {
+	max-width: none !important;
+}
+
+/* Augmentation de la taille de la police (proportionnellement à la taille de la fenêtre */
+div#content {
+	font-size: 3.8vm;
+	font-size: 3.8vmin;
+}
+
+/* Désactivation du flex du main le temps de la pagination */
+#main[ps-paginated=pending] {
+	display: block !important;
+}
+
+#main[ps-paginated=pending] div#content {
+	overflow: hidden;
+	flex: 1;
+}
+
+/* Désactivation du comportement flex du contenu (déporté sur les pages) */
+#main[ps-paginated=true] div#content {
+	flex: 0 0 auto;
+}
+
+/* Réactivation du scroll pour les exercices et les contenus dépassant */
+#main[ps-paginated=true] div#content.sldScroll {
+	flex: 1 1 auto;
+	align-self: stretch;
+}
+
+/* Bug Edge 14.14393 : problem with large content */
+#main[ps-paginated=pending] > ps-page:not([ps-processing]) {
+	display: none;
+}
+
+/* Transition des slides */
+#main[ps-paginated=true] > ps-page {
+	transition: opacity 0.5s ease-in;
+}
+
+/* Les slides sont cachés excepté la courante */
+#main[ps-paginated=true] > ps-page:not([ps-slideshow-current]) {
+	opacity: 0;
+	height: 0;
+	width: 0;
+	overflow: hidden;
+}
+
+/* Bug Edge 14.14393 : the page styles are not updated with only the :not() selector */
+/* On rend les pages flexibles pour s'adapter à la visiblité du menu */
+#main[ps-paginated=true] > ps-page[ps-slideshow-current] {
+	width: auto;
+	height: auto;
+	flex: 1;
+	order: 2;
+}
+
+/* Centrage du contenu de la slide */
+#main[ps-paginated=true] > ps-page > ps-area {
+	justify-content: center;
+	align-items: center;
+}
+
+/* Règles de pagination */
+div.info, div.block {
+	-ps-page-break-before: always;
+	min-width: 50vw;
+}
+
+section {
+	-ps-page-break-before: always;
+}
+
+div.exercice:not(.openQuestion) {
+	-ps-page-break-before: always;
+	-ps-page-break-inside: avoid;
+}
+
+div.exercice div.info,
+div.exercice div.block {
+	-ps-page-break-before: auto;
+}
+
+div.openQuestion div.solution {
+	-ps-page-break-before: always;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	-ps-page-break-after: avoid;
+}
+
+figure, table {
+	-ps-page-break-inside: avoid;
+}
+
+/* Limitation de la hauteur des figures */
+figure.image img, figure.video video {
+	max-height: 20em;
+	width: auto;
+}
+
+div.seek_progress {
+	max-width: 40vw;
+}
+
+figure.net iframe {
+	max-height: 20em;
+}
+
+/* Ouverture forcée des blocs collapsés */
+div#content .collBlk_closed {
+	display: block;
+}
+.section_closed,
+.section_open,
+figcaption .collapsed .descBlock_closed,
+figcaption .collapsed .descBlock_open {
+	color: unset;
+	pointer-events: none;
+}
+.section_closed::after,
+.section_open::after,
+figcaption .collapsed .descBlock_closed::before,
+figcaption .collapsed .descBlock_open::before,
+.openQuestion .block_open::before,
+.openQuestion .block_closed::before {
+	content: none;
+	-ps-content: "";
+}
+.section.collapsed .section_ti, *:target {
+	background-color: transparent !important;
+}
+.section.collapsed > .section_co {
+	padding-left: 0;
+}
+
+/* Les blocs des exercices sont refermés en fin de pagination */
+#main[ps-paginated=true] div.exercice:not(.openQuestion) .collBlk_closed {
+	display: none;
+}
+
+/* Style de la page et des marges */
+ps-page {}
+ps-page > ps-area {
+	top: 3em;
+	right: 0.5em;
+	bottom: 3em;
+	left: 0.5em;
+}
+ps-page > ps-margin.ps-top {
+	height: 3em;
+}
+ps-page > ps-margin.ps-left {
+	top: 3em;
+}
+ps-page > ps-margin.ps-right {
+	top: 3em;
+}
+ps-page > ps-margin.ps-right {
+	width: 0.5em;
+}
+ps-page ps-margin-box.ps-right-corner {
+	max-width: 0.5em;
+	min-width: 0.5em;
+}
+ps-page > ps-margin.ps-bottom {
+	height: 3em;
+}
+ps-page > ps-margin.ps-left {
+	bottom: 3em;
+}
+ps-page > ps-margin.ps-right {
+	bottom: 3em;
+}
+ps-page > ps-margin.ps-left {
+	width: 0.5em;
+}
+ps-page ps-margin-box.ps-left-corner {
+	max-width: 0.5em;
+	min-width: 0.5em;
+}
+ps-page > ps-margin.ps-top > ps-margin-box.ps-center {
+	color: #006978;
+	font-size: 1.5em;
+	text-transform: uppercase;
+	font-weight: bold;
+	flex: 1 1 auto;
+}
+ps-page > ps-margin.ps-top > ps-margin-box.ps-center::before {
+	-ps-content: string(sectionTitle);
+}
+ps-page > ps-margin.ps-bottom > ps-margin-box.ps-right {
+	color: #006978;
+	font-size: 1em;
+	font-weight: bold;
+	padding-right: 0.5em;
+	flex: 1 0 0;
+}
+ps-page > ps-margin.ps-bottom > ps-margin-box.ps-right::before {
+	content: counter(page) " / " counter(pages);
+	-ps-content: "";
+}
+
+ps-page[ps-name=title] {}
+
+ps-page[ps-name=title] > ps-margin.ps-top > ps-margin-box.ps-center {
+	flex: 1 1 auto;
+}
+
+ps-page[ps-name=title] > ps-margin.ps-top > ps-margin-box.ps-center::before {
+	content: none;
+	-ps-content: "";
+}
+
+ps-page[ps-name=title] > ps-margin.ps-bottom > ps-margin-box.ps-right {
+	flex: 1 0 0;
+}
+
+ps-page[ps-name=title] > ps-margin.ps-bottom > ps-margin-box.ps-right::before {
+	content: none;
+	-ps-content: "";
+}
+
+.section_ti {
+	-ps-page: title;
+}
+
+.section_ti > a:first-child {
+	-ps-string-set: sectionTitle content();
+}
+
