@@ -1,4 +1,4 @@
-## Technologie collège
+## Technologie college
 
 [Manuel cycle 3](https://profdetech.github.io/C3_manuel/)
 [Manuel cycle 4](https://profdetech.github.io/C4_manuel/)
