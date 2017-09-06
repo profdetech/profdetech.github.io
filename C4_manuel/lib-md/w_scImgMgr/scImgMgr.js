@@ -363,13 +363,17 @@ scImgMgr.xInitImgs = function(pCo) {
 	}
 }
 scImgMgr.xInitImg = function(pImg) {
-	if (pImg.width>this.fMaxDeviceWidth){
-		pImg.setAttribute("width", "");
-		pImg.setAttribute("height", "");
-		pImg.style.maxWidth = "100%";
-		pImg.style.height = "auto";
+	pImg.fWidth = pImg.width;
+	pImg.setAttribute("width", "");
+	pImg.setAttribute("height", "");
+	pImg.style.width = "100%";
+	pImg.style.maxWidth = pImg.fWidth+"px";
+	pImg.style.height = "auto";
+	pImg.fIsAdapted = true;
+	
+/*	if (pImg.width>this.fMaxDeviceWidth){
 		pImg.fIsAdapted = true;
-	}
+	}*/
 }
 /* === Animation manager ==================================================== */
 scImgMgr.xInitAnims = function(pCo) {
@@ -590,21 +594,24 @@ scImgMgr.xInitZms = function(pCo) {
 		for(var j=0; j<vZooms.length; j++) {
 			var vAnc = vZooms[j];
 			try {
-				var vSubImg = scPaLib.findNode("des:img", vAnc);
-				if (vSubImg && vSubImg.fIsAdapted) {
-					vAnc.onclick=function(){return true;}
-				} else {
-					vAnc.fZmUri = vAnc.href;
-					vAnc.fOpts = this.fPathZoom[i].fOpts;
-					vAnc.target = "_self";
-					vAnc.fName=this.fTypZm+"Zm";
-					vAnc.fObj=vAnc;
-					vAnc.setAttribute("role", "button");
-					vAnc.title = this.xGetStr(32);
-					vAnc.onclick=function(){return scImgMgr.xBtnMgr(this);}
-					vAnc.onkeydown=function(pEvent){scDynUiMgr.handleBtnKeyDwn(pEvent);}
-					vAnc.onkeyup=function(pEvent){scDynUiMgr.handleBtnKeyUp(pEvent);}
+				vAnc.fImg = scPaLib.findNode("des:img", vAnc);
+				vAnc.fZmUri = vAnc.href;
+				vAnc.fOpts = this.fPathZoom[i].fOpts;
+				vAnc.fName=this.fTypZm+"Zm";
+				vAnc.fObj=vAnc;
+				vAnc.setAttribute("role", "button");
+				vAnc.title = this.xGetStr(32);
+				vAnc.onclick=function(){
+					if (this.fImg && this.fImg.fIsAdapted && this.fImg.fWidth > window.innerWidth) {
+							this.target = "_blank";
+						return true;
+					} else {
+							this.target = "_self";
+						return scImgMgr.xBtnMgr(this);
+					}
 				}
+				vAnc.onkeydown=function(pEvent){scDynUiMgr.handleBtnKeyDwn(pEvent);}
+				vAnc.onkeyup=function(pEvent){scDynUiMgr.handleBtnKeyUp(pEvent);}
 			} catch(e){
 				scCoLib.log("scImgMgr.xInitZms::Error : "+e);
 			}

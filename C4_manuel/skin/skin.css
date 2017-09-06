@@ -110,6 +110,10 @@ a.infoLink:hover {
     content: "✩ ";
 }
 
+.ico_tim .MathJax_SVG_Display {
+	display: inline !important;
+}
+
 h4, h5, h6 {
 	font-size: 1em;
 }
@@ -266,10 +270,17 @@ body.default #accessibility a:focus {
 }
 
 body.default #header h1 {
-	margin: 0;
+	margin: 0 60px 0 0;
 	text-transform: uppercase;
 	line-height: 50px;
 	font-size: 1.5em;
+	hyphens: auto;
+}
+
+body.default #header h1 span {
+    display: inline-block;
+    line-height: 1.2;
+    vertical-align: middle;
 }
 
 body.noBack.noMenu #header h1 {
@@ -332,6 +343,7 @@ body.default #outline {
 	background-color: #CCE1E4;
 	display: flex;
 	flex-direction: column;
+	z-index: 2;
 }
 body.default #outline a{
 	color: #006978;
@@ -379,16 +391,38 @@ body.default #outline > .mnuSrlDwnFra {
 	position: relative;
 }
 
+body.default #illustration {
+	flex:none;
+	position:absolute;
+	left:0;
+	right:0;
+	overflow: hidden;
+	height: 350px;
+}
+body.default.showMenu #illustration {
+	left:250px;
+}
+body.default #illustration img{
+	width:100%;
+	height: auto;
+}
+
 body.default #content {
 	flex: 1 1 auto;
 	order: 2;
 	overflow: auto;
+	scroll-behavior: smooth;
 	-webkit-overflow-scrolling: touch;
 	position: relative;
+	z-index: 2;
+}
+body.default.hasIllustration #content {
+	padding-top: 350px;
 }
 
 body.default #content > section {
-	margin: 1em;
+	padding: 1em;
+	background-color: #FFFFFF;
 }
 
 /* program */
@@ -649,6 +683,7 @@ body.hideInfo aside.info {
 
 aside.info .rootInfo,
 aside.info .pageInfo,
+aside.info .sectionInfo,
 body.program header.meta,
 .activityBlock_desc {
 	display: flex;
@@ -659,6 +694,7 @@ body.program header.meta,
 
 aside.info .rootInfo,
 aside.info .pageInfo,
+aside.info .sectionInfo,
 .activityBlock_desc {
 	padding-left: 10px;
 	padding-right: 10px;
@@ -666,6 +702,7 @@ aside.info .pageInfo,
 
 aside.info .rootInfo > *,
 aside.info .pageInfo > *,
+aside.info .sectionInfo > *,
 body.program header.meta > * {
 	flex: 1 1 auto;
 }
@@ -676,32 +713,53 @@ aside.info {
 	padding: 0.1em;
 }
 
-aside.info .rootInfo > *:first-child, aside.info .pageInfo > *:first-child,
-body.program header.meta > *:first-child, .activityBlock_desc > *:first-child {
+aside.info .rootInfo > *:first-child, 
+aside.info .pageInfo > *:first-child,
+aside.info .sectionInfo > *:first-child,
+body.program header.meta > *:first-child, 
+.activityBlock_desc > *:first-child {
 	flex: 20 20 auto;
 	min-width: 350px;
 }
 
-aside.info .rootInfo > *:last-child, aside.info .pageInfo > *:last-child,
-body.program header.meta > *:last-child, .activityBlock_desc > *:last-child {
+aside.info .rootInfo > *:last-child, 
+aside.info .pageInfo > *:last-child,
+aside.info .sectionInfo > *:last-child,
+body.program header.meta > *:last-child, 
+.activityBlock_desc > *:last-child {
 	border-left: 1px solid #576f72;
 	max-width: 350px;
 	padding-left: 1em;
 }
 
-aside.info .rootInfo > *:only-child, aside.info .pageInfo > *:only-child,
-body.program header.meta > *:only-child, .activityBlock_desc > *:only-child {
+aside.info .rootInfo > *:only-child, 
+aside.info .pageInfo > *:only-child,
+aside.info .sectionInfo > *:only-child,
+body.program header.meta > *:only-child, 
+.activityBlock_desc > *:only-child {
 	border-left: medium none;
 	max-width: inherit;
 	padding-left: 0;
 }
 
-aside.info .rootInfo em, aside.info .pageInfo em,
-body.program header.meta em, .activityBlock_desc em {
+aside.info .rootInfo em, 
+aside.info .pageInfo em,
+aside.info .sectionInfo em,
+body.program header.meta em, 
+.activityBlock_desc em {
 	color: #576f72;
 	font-style: normal;
 	font-weight: bold;
 	text-transform: uppercase;
+}
+aside.sectionIllustration img{
+	width:100%;
+	height: auto;
+}
+aside.sectionIllustration{
+	max-height:350px;
+	overflow:hidden;
+	line-height:0;
 }
 
 .abstract, .organisation, .duration {
@@ -717,6 +775,10 @@ body.program header.meta em, .activityBlock_desc em {
 	margin: 5px 0;
 }
 
+div.legalInfo{
+	font-size: 0.8em;
+	padding: 10px;
+}
 /* CONTENT ELEMENTS */
 .section_ti a {
 	text-decoration: none;
@@ -834,7 +896,9 @@ a.anchor {
 	content: "\e811";
 }
 
-#outline li .activityBlock_ti_lo::before, #outline li.outlineType_textActivity > .outlineLabel > .outlineItem::before, .folderChildren li.textActivity a::before {
+#outline li .activityBlock_ti_lo::before, 
+.folderChildren li.textActivity a::before, #outline li.outlineType_textActivity > .outlineLabel > .outlineItem::before,
+.folderChildren li.richStreamActivity a::before, #outline li.outlineType_richStreamActivity > .outlineLabel > .outlineItem::before {
 	content: "\e814";
 }
 
@@ -1393,7 +1457,10 @@ body.default #outline > .toolBar a:hover {
 	padding: 0.5em 1em;
 }
 
-.section.collapsed > .section_co {
+.activity .section_co > .section.collapsed {
+	padding: 0 0 0 1em;
+}
+.program .section.collapsed > .section_co {
 	padding: 1em 0 1em 1em;
 }
 
@@ -1514,6 +1581,9 @@ body.program .collBlk_closed > a.colBlockTgleBtn > span.labelOpen {
 	color: #FFFFFF;
 	border-radius: 5px 5px 0 0;
 }
+.tooltip_ti strong{
+	color: #FFFFFF;
+}
 
 .tooltip_co {
 	padding: 0 5px 2px 5px;
@@ -1609,6 +1679,7 @@ body.default.quizActivity #content > aside {
 body.default.quizActivity #content > section {
 	flex: 1 1 auto;
 	display: flex;
+	padding:0;
 }
 
 body.default.quizActivity .iframeContainer {
@@ -1998,6 +2069,53 @@ div.choiceList_la p {
 
 .assmntSolUnche .choiceList_sol::before {
 	content: "\f096";
+}
+
+.choiceExplain::before, .explain::before, .choiceExp::before, .globalExp::before {
+    content: "\e804";
+    font-family: "fontello";
+    left: -2em;
+    position: absolute;
+    top: 0.5em;
+	font-style:normal;
+}
+.choiceExplain {
+	background-color: #e9e9e9;
+	color: #006978;
+	font-style: italic;
+	margin-left: 2em;
+	padding: 0.5em;
+	position: relative;
+}
+.explain {
+	background-color: #e9e9e9;
+	color: #006978;
+	font-style: italic;
+	margin-left: 2em;
+	padding: 0.5em;
+	position: relative;
+}
+.choiceExp {
+	background-color: #e9e9e9;
+	color: #006978;
+	font-style: italic;
+	margin-left: 2em;
+	padding: 0.5em;
+	position: relative;
+}
+.globalExp {
+	background-color: #e9e9e9;
+	color: #006978;
+	font-style: italic;
+	margin-left: 2em;
+	padding: 0.5em;
+	position: relative;
+}
+.explain{
+	margin-top:1em;
+}
+.explain_ti, .globalExp h4{
+	margin-top:0;
 }
 
 /* --- CATEGORISATION/ORDONNANCEMENT ------------------------------------------------------- */
@@ -2518,8 +2636,9 @@ div.choiceList_la p {
 /* === STOP - QUIZ ======================================================== */
 
 /* === START - SCIMGMGR ===================================================== */
-.imgZoom {
+.zoom {
 	display: inline-block;
+	line-height: 0;
 }
 
 .scImgZmBtnCls {
@@ -3251,16 +3370,16 @@ ps-loading-spinner::before {
 		min-width: 200px;
 	}
 	body.default #header h1 {
-		height: 50px;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
 		font-size: 1.2em;
 	}
 }
 
 @media (max-width: 650px) {
-	body.default header.meta > *:first-child, .activityBlock_desc > *:first-child {
+	aside.info .rootInfo > :first-child, 
+	aside.info .pageInfo > :first-child, 
+	aside.info .sectionInfo > :first-child, 
+	body.program header.meta > :first-child, 
+	.activityBlock_desc > :first-child {
 		min-width: 200px;
 	}
 	body.default #header h1 {
@@ -3271,7 +3390,10 @@ ps-loading-spinner::before {
 		position: absolute;
 		bottom: 0px;
 		top: 0px;
-		z-index: 2;
+		z-index: 3;
+	}
+	body.default.showMenu #illustration {
+		left:0;
 	}
 
 	.warning, .rule, .extra, .method, .reminder, .hypothesis, .advice, .example, .definition, .profInstruction, .studentInstruction {
@@ -3308,7 +3430,18 @@ ps-loading-spinner::before {
 	body.program header.meta {
 		display: block;
 	}
-
+	aside.info .rootInfo, aside.info .pageInfo, aside.info .sectionInfo, body.program header.meta, .activityBlock_desc {
+    display: block;
+	}
+	aside.info .rootInfo > :last-child, 
+	aside.info .pageInfo > :last-child, 
+	aside.info .sectionInfo > :last-child, 
+	body.program header.meta > :last-child, 
+	.activityBlock_desc > :last-child {
+	    border-left: 0;
+	    max-width: auto;
+	    padding-left: 0;
+	}
 	.visavis {
 		display: block;
 	}
@@ -3389,7 +3522,6 @@ ps-loading-spinner::before {
 		height: 200px !important;
 	}
 	body.default #header h1 {
-		height:34px;
 		line-height:34px;
 	}
 	button.backBtn, button.menuBtn, body.showMenu button.menuBtn:hover, button.infoBtn, .showInfo button.infoBtn:hover {
@@ -3442,7 +3574,7 @@ ps-loading-spinner::before {
 	}
 
 	body.default #content > section {
-		margin: 0.5em;
+		padding: 0.5em;
 	}
 
 	body.richStreamActivity.teVideoType div.mediaArea {

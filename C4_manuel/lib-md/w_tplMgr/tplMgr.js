@@ -38,19 +38,22 @@
 
 /* === CANOPROF page manager ================================================ */
 var tplMgr = {
-	fLogin : null,
-	fCbkInit : true,
 	fHeaderPath : "ide:header",
 	fMenuPath : "ide:outline",
 	fPageOutlinePath : "ide:outline/des:ul.pageOutline",
-	fPageOutlineAnchors : [],
-	fPageOutlineTargets : [],
 	fContentPath : "ide:content",
 	fInfoPath : "ide:info",
 	fExternalIframePath : "des:iframe.externalUrl",
+	fPdfIframePath : "des:iframe.pdfFrame",
 	fCbkPath : "des:.collapsed",
 	fGapPath : "des:input.gapInput|input.exoInput",
 	fLnkHistPath : "des:a.lnkActivity|a.lnkTool",
+	fStudentAreaPath : "des:div.studentArea/chi:textarea",
+	fMatchBasketPath : "des:td.mtTdBasket",
+	fLogin : null,
+	fCbkInit : true,
+	fPageOutlineAnchors : [],
+	fPageOutlineTargets : [],
 	fInfoOpen : true,
 	fMenuOpen : false,
 	fScrollTicking : false,
@@ -58,7 +61,9 @@ var tplMgr = {
 	fWheelScrollFactor : 10,
 	fHoverScrollSpeed : 2,
 	fClickScrollJump : 20,
-	fStudentAreaPath : "des:div.studentArea/chi:textarea",
+	fIsIOS : /iphone|ipad|ipod/i.test(navigator.userAgent.toLowerCase()),
+	fIsAndroid: /android/i.test(navigator.userAgent.toLowerCase()),
+	fListeners : {scrollPage:[]},
 	fStrings : ["Ouvrir le menu","Fermer le menu",
 		/*02*/    "Afficher les informations","Cacher les informations",
 		/*04*/    "défilement haut","Faire défiler le menu vers le haut",
@@ -68,6 +73,7 @@ var tplMgr = {
 		/*12*/    "Retour","Revenir à \'%s\'",
 		/*14*/    "Diaporama","Active la consultation du contenu en mode diaporama",
 		/*16*/    'Ouvrir le contenu distant \"%s\" dans une nouvelle fenêtre.',"Un contenu non sécurisé (http) ne peut être embarqué dans une page sécurisée (https).",
+		/*18*/    "Votre navigateur ne permet pas de visualiser des PDF directement dans une page web. Pour le visualiser : ","cliquez ici",
 		""],
 
 	controlLogin : function(pLogin){
@@ -81,6 +87,18 @@ var tplMgr = {
 		try{
 			var vHash = window.location.hash;
 			if (vHash.length>0); vHash = vHash.substring(1);
+			this.fContent = scPaLib.findNode(this.fContentPath);
+			this.fContent.style.position = "relative";
+			this.fContent.addEventListener("scroll", function(pEvt){
+				tplMgr.fScrollPos = pEvt.target.scrollTop;
+				if (!tplMgr.fScrollTicking){
+					window.requestAnimationFrame(function() {
+						tplMgr.fireEvent("scrollPage");
+						tplMgr.fScrollTicking = false;
+					});
+				}
+				tplMgr.fScrollTicking = true;
+			});
 
 			// Close collapsable blocks that are closed by default.
 			scDynUiMgr.collBlk.fMode = 1;
@@ -100,6 +118,7 @@ var tplMgr = {
 					}
 				}
 			}
+
 			// Init activity history
 			if (scPaLib.findNode("bod:.default")){
 				try {
@@ -125,7 +144,6 @@ var tplMgr = {
 						break;
 					}
 				}
-				//scCoLib.log(JSON.stringify(this.fLinkHistory))
 				if (this.fLinkHistory.length>0){
 					var vBackButton = scDynUiMgr.addElement("button", scPaLib.findNode(this.fHeaderPath), "backBtn");
 					vBackButton.onclick = function(){window.location.assign(tplMgr.fLinkHistory[0].href)};
@@ -149,6 +167,7 @@ var tplMgr = {
 			} else {
 				this.xSwitchClass(document.body, "showInfo", "hideInfo", true);
 			}
+			
 			// Init menu
 			if (scPaLib.findNode(this.fMenuPath)){
 				var vMenu = this.fMenu = scPaLib.findNode(this.fMenuPath+"/chi:ul.outline|.pageOutline");
@@ -162,7 +181,6 @@ var tplMgr = {
 						this.xAddBtn(vMenuToolbar, "cbkOpenBtn", this.fStrings[8], this.fStrings[9]).onclick = function() {tplMgr.openCbks()};
 						this.xAddBtn(vMenuToolbar, "cbkCloseBtn", this.fStrings[10], this.fStrings[11]).onclick = function() {tplMgr.closeCbks()};
 					}
-					// Init Scroll
 					if ("ScSiRuleEnsureVisible" in window) this.fMenuRule = new ScSiRuleEnsureVisible("ide:outline/des:.outlineSelect_yes|.currentSection_yes", "anc:ul.outlineRoot");
 					vMenu.style.overflow="hidden";
 					var vSrlUp = this.fSrlUp = scDynUiMgr.addElement("div", vMenu.parentNode, "mnuSrlUpFra", vMenu);
@@ -213,7 +231,6 @@ var tplMgr = {
 						tplMgr.scrollTask.step(tplMgr.fClickScrollJump);
 						return false;
 					}
-					// Init scroll manager
 					this.scrollTask.checkBtn();
 					scSiLib.addRule(vMenu, this.scrollTask);
 					vMenu.onscroll = function(){tplMgr.scrollTask.checkBtn()};
@@ -240,7 +257,7 @@ var tplMgr = {
 					this.xSwitchClass(document.body, "showMenu", "hideMenu", true);
 				}
 			}
-			this.fContent = scPaLib.findNode(this.fContentPath);
+
 			// Init page outline
 			var vPageOutline = scPaLib.findNode(this.fPageOutlinePath);
 			if (vPageOutline){
@@ -251,19 +268,10 @@ var tplMgr = {
 					vTarget.fAnchor = vPageOutlineAnchor;
 					this.fPageOutlineTargets.push(vTarget);
 				}
-				this.fContent.style.position = "relative";
-				this.fContent.addEventListener("scroll", function(pEvt){
-					tplMgr.fScrollPos = pEvt.target.scrollTop;
-					if (!tplMgr.fScrollTicking){
-						window.requestAnimationFrame(function() {
-							tplMgr.updatePageOutline();
-							tplMgr.fScrollTicking = false;
-						});
-					}
-					tplMgr.fScrollTicking = true;
-				});
+				this.registerListener("scrollPage", function(){tplMgr.updatePageOutline();});
 				this.updatePageOutline();
 			}
+
 			// HASH listener
 			window.addEventListener("hashchange", function(pEvt){
 				var vHash = window.location.hash;
@@ -294,6 +302,43 @@ var tplMgr = {
 						scServices.suspendDataStorage.setVal(["StudentArea", this.id], this.value);
 					} else localStorage.setItem(this.id, this.value);
 				}, false);
+			}
+
+			// Init pdfFrames
+			if (this.fIsAndroid || this.fIsIOS){
+				var vPdfIframes = scPaLib.findNodes(this.fPdfIframePath);
+				for (var i=0; i<vPdfIframes.length; i++) {
+					var vPdfIframe = vPdfIframes[i];
+					var vIframeParent = vPdfIframe.parentNode;
+					scDynUiMgr.addElement("em", vIframeParent, "pdfFallBack").innerHTML = this.fStrings[18];
+					var vPdfLink = scDynUiMgr.addElement("a", vIframeParent, "pdfLink");
+					vPdfLink.target="_blank";
+					vPdfLink.href=vPdfIframe.src;
+					vPdfLink.innerHTML = this.fStrings[19];
+					vIframeParent.removeChild(vPdfIframe);
+				}
+			}
+			
+			// Init fMatchBasketPath
+			this.MatchBaskets = scPaLib.findNodes(this.fMatchBasketPath);
+			if (this.MatchBaskets.length>0){
+				this.registerListener("scrollPage", function(){tplMgr.updateMatchBaskets();});
+				scSiLib.addRule(this.fContent, {
+					onResizedAnc : function(pOwnerNode, pEvent) {
+						if(pEvent.phase==1 || pEvent.resizedNode == pOwnerNode) return;
+						tplMgr.updateMatchBaskets();
+					},
+					onResizedDes : function(pOwnerNode, pEvent) {
+						if(pEvent.phase==1) return;
+						tplMgr.updateMatchBaskets();
+					},
+				});
+				for (var i=0; i<this.MatchBaskets.length; i++) {
+					var vMatchBasket = this.MatchBaskets[i];
+					vMatchBasket.fContainer = scPaLib.findNode("chi:div", vMatchBasket);
+					vMatchBasket.fContainer.style.marginTop = "0px";
+					vMatchBasket.fContainer.style.marginBottom = "0px";
+				}
 			}
 
 			if ("scTooltipMgr" in window ) {
@@ -354,6 +399,20 @@ var tplMgr = {
 	closeCbks : function(){
 		var vCbks = scPaLib.findNodes("des:.collBlk_open");
 		for (var i=0; i<vCbks.length; i++) vCbks[i].fTitle.onclick();
+	},
+	updateMatchBaskets : function(){
+		//scCoLib.log("updateMatchBaskets");
+		for (var i=0; i<this.MatchBaskets.length; i++) {
+			var vBasket = this.MatchBaskets[i];
+			vBasketOffset = this.xGetOffsetTop(vBasket, this.fContent);
+			if (isNaN(vBasketOffset)) break;
+			var vScrollTop = this.fContent.scrollTop;
+			var vContentHeight = this.fContent.clientHeight;
+			var vBasketHeight = vBasket.clientHeight;
+			if (vBasketOffset+vBasketHeight>vScrollTop && vBasketOffset<vScrollTop){ // Basket is visible
+				vBasket.fContainer.style.marginTop=Math.min(vScrollTop-vBasketOffset, vBasketHeight-vBasket.fContainer.clientHeight)+"px";
+			} else vBasket.fContainer.style.marginTop="0px";
+		}
 	},
 	updatePageOutline : function(pTarget){
 		//scCoLib.log("updatePageOutline");
@@ -437,6 +496,14 @@ var tplMgr = {
 			postscriptumMgr.init([ 'cp-slideshow' ], initSldMode);
 			if (!mathjaxMgr.isReady()) mathjaxMgr.register(initSldMode);
 		}
+	},
+	registerListener : function(pListener, pFunc){
+		if (this.fListeners[pListener]) this.fListeners[pListener].push(pFunc);
+		else scCoLib.log("ERROR - tplMgr.registerListener - non-existent listener : " + pListener);
+	},
+	fireEvent : function(pListener, pParam){
+		if (this.fListeners[pListener]) for (var i=0; i< this.fListeners[pListener].length; i++) this.fListeners[pListener][i](pParam);
+		else scCoLib.log("ERROR - tplMgr.fireEvent - non-existent listener : " + pListener);
 	},
 
 	/* === Callback functions =================================================== */

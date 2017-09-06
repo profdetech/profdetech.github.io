@@ -1,4 +1,4 @@
-@import url(../../../https://fonts.googleapis.com/css?family=Droid+Serif:400,400i,700,700i);
+@import url(../../../https://fonts.googleapis.com/css?family=Rubik:300,300i,400,400i,500,500i,700,700i,900,900i);
 
 
 
@@ -21,35 +21,35 @@ body {
   line-height: 1.6;
 }
 .display-1 {
-  font-family: 'Droid Serif', serif;
+  font-family: 'Rubik', sans-serif;
   font-size: 4.25rem;
 }
 .display-1 > .mbr-iconfont {
   font-size: 6.8rem;
 }
 .display-2 {
-  font-family: 'Droid Serif', serif;
+  font-family: 'Rubik', sans-serif;
   font-size: 3rem;
 }
 .display-2 > .mbr-iconfont {
   font-size: 4.8rem;
 }
 .display-4 {
-  font-family: 'Droid Serif', serif;
+  font-family: 'Rubik', sans-serif;
   font-size: 1rem;
 }
 .display-4 > .mbr-iconfont {
   font-size: 1.6rem;
 }
 .display-5 {
-  font-family: 'Droid Serif', serif;
+  font-family: 'Rubik', sans-serif;
   font-size: 1.5rem;
 }
 .display-5 > .mbr-iconfont {
   font-size: 2.4rem;
 }
 .display-7 {
-  font-family: 'Droid Serif', serif;
+  font-family: 'Rubik', sans-serif;
   font-size: 1rem;
 }
 .display-7 > .mbr-iconfont {
@@ -101,7 +101,7 @@ body {
   word-break: break-word;
 }
 .navbar .btn {
-  font-family: 'Droid Serif', serif;
+  font-family: 'Rubik', sans-serif;
   font-size: 1rem;
 }
 .navbar .btn > .mbr-iconfont {
@@ -629,7 +629,7 @@ a:hover {
   background-color: #f5f5f5;
   box-shadow: none;
   color: #565656;
-  font-family: 'Droid Serif', serif;
+  font-family: 'Rubik', sans-serif;
   font-size: 1rem;
   line-height: 1.43;
   min-height: 3.5em;
@@ -1174,7 +1174,7 @@ pre {
   }
 }
 .cid-qrNAwsv3YA {
-  background-color: #000000;
+  background-image: url("../../../assets/images/gears3.svg");
 }
 .cid-qrNq7rQS8M .navbar {
   padding: .5rem 0;
