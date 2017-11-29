@@ -39,6 +39,11 @@ Boussole numérique
 [allez plus loin](https://profdetech.github.io/plus/)
 
 
+# Pour les professeurs:
+
+[Stage / Formation](https://profdetech.github.io/stage/)
+
+
 
 ###Aide pour le prof sur github page
 
