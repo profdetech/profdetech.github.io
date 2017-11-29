@@ -2,32 +2,30 @@
 Espace réservé à M. MOURONVAL
 Pour les élèves: allez sur le moodle du collège.
 
-# Cycle 3:
-[Manuel cycle 3](https://profdetech.github.io/C3_manuel/)
+# Cycle 3: [Manuel cycle 3](https://profdetech.github.io/C3_manuel/)
 
-[besoin pour survivre](https://profdetech.github.io/C3_a_survivre/)
+[Besoin pour survivre](https://profdetech.github.io/C3_a_survivre/)
 
 [Histoire des objets techniques](https://profdetech.github.io/C3_histoire/)
 
 [Fonctionnement OT](https://profdetech.github.io/C3_transport/)
 
-[robot sur mars](https://profdetech.github.io/C3_robot/)
+[Robot sur mars](https://profdetech.github.io/C3_robot/)
 
-[fusée](https://profdetech.github.io/C3_fusee/)
+[Fusée](https://profdetech.github.io/C3_fusee/)
 
 
-# cycle 4:
-[Manuel cycle 4](https://profdetech.github.io/C4_manuel/)
+# cycle 4: [Manuel cycle 4](https://profdetech.github.io/C4_manuel/)
 
-[skate](https://profdetech.github.io/C4_skate/)
+[Skate](https://profdetech.github.io/C4_skate/)
 
-[projet support telephone](https://profdetech.github.io/C4_support_telephone/)
+[Projet support telephone](https://profdetech.github.io/C4_support_telephone/)
 
 [Analyse portail automatique](https://profdetech.github.io/C4_portail1/)
 
 [Automatisation du portail](https://profdetech.github.io/C4_portail2/)
 
-Boussole numérique
+[Boussole numérique](https://profdetech.github.io/C4_boussole/)
 
 [Concours mbot](https://profdetech.github.io/C4_concours_mbot/)
 
