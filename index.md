@@ -1,6 +1,6 @@
 # Technologie college
 Espace réservé à M. MOURONVAL
-Pour les élèves aller sur moodle.
+Pour les élèves: allez sur le moodle du collège.
 
 # Cycle 3:
 [Manuel cycle 3](https://profdetech.github.io/C3_manuel/)
@@ -45,7 +45,7 @@ Boussole numérique
 
 
 
-###Aide pour le prof sur github page
+#Aide sur github page
 
 [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 
