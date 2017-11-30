@@ -17,7 +17,7 @@ Pour les élèves: allez sur le moodle du collège.
 
 # cycle 4: [Manuel cycle 4](https://profdetech.github.io/C4_manuel/)
 
-[Skate](https://profdetech.github.io/C4_skate/)
+[Skate park](https://profdetech.github.io/C4_skate/)
 
 [Projet support telephone](https://profdetech.github.io/C4_support_telephone/)
 
@@ -29,12 +29,12 @@ Pour les élèves: allez sur le moodle du collège.
 
 [Concours mbot](https://profdetech.github.io/C4_concours_mbot/)
 
-[robot aspirateur](https://profdetech.github.io/C4_robot_aspi/)
+[Robot aspirateur](https://profdetech.github.io/C4_robot_aspi/)
 
 
 # Pour les plus rapide ou aller plus loin :
 
-[allez plus loin](https://profdetech.github.io/plus/)
+[Allez plus loin](https://profdetech.github.io/plus/)
 
 
 # Pour les professeurs:
