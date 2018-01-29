@@ -14,6 +14,7 @@ Pour les élèves: allez sur le moodle du collège.
 
 [Fusée](https://profdetech.github.io/C3_fusee/)
 
+[Transmission numerique](https://profdetech.github.io/C3_num/)
 
 # cycle 4: [Manuel cycle 4](https://profdetech.github.io/C4_manuel/)
 
