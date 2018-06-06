@@ -42,6 +42,7 @@ var scImgMgr = {
 	fPathGal : [],
 	fPathZoom : [],
 	fPathImg : [],
+	fPathSvg : [],
 	fAnims : null,
 	fGals : null,
 	fZooms : null,
@@ -114,6 +115,8 @@ scImgMgr.init = function() {
 		}
 		// Load images ...
 		this.xInitImgs(this.fSourceRoot);
+		// Mend svgs ...
+		this.xInitSvgs(this.fSourceRoot);
 		//Register listeners...
 		scDynUiMgr.collBlk.addOpenListener(this.sCollBlkOpen);
 		scDynUiMgr.collBlk.addCloseListener(this.sCollBlkClose);
@@ -171,11 +174,12 @@ scImgMgr.registerGallery = function(pPathGal, pOpts) {
  * @param pPathZoom scPaLib path vers les zooms.
  * @param pOpts options du zoom.
  *           toolbar : 0 = pas de toolbar / 1 = toolbar
- *           type : img = zoom d'image / iframe = zoom chargé dans une iframe
+ *           type : img = zoom d'image / svg = zoom de svg / iframe = zoom chargé dans une iframe
  *           mag : 0 = pas de loupe /  1 = ajouter une loupe si besoin
  *           magScale : relative size of the zoom area compared to the visible image
  *           magMax : 0 = pas de mode max /  1 = mode max sur click
  *           magPan : 0 = pas de pan en mode max /  1 = pan en mode max
+ *           svgMax : 0 = svg affiché à sa taille standard / 1 = toujours maximiser les svg pour ateindre la taille du viewport
  *           titlePath : scPaLib path to a title relative to the anchor.
  *           clsPre : préfix de classe CSS
  */
@@ -189,6 +193,7 @@ scImgMgr.registerZoom = function(pPathZoom, pOpts) {
 	vZm.fOpts.magScale = (typeof vZm.fOpts.magScale == "undefined" ? 0.33 : vZm.fOpts.magScale);
 	vZm.fOpts.magMax = (typeof vZm.fOpts.magMax == "undefined" ? 1 : vZm.fOpts.magMax);
 	vZm.fOpts.magPan = (typeof vZm.fOpts.magPan == "undefined" ? 1 : vZm.fOpts.magPan);
+	vZm.fOpts.svgMax = (typeof vZm.fOpts.svgMax == "undefined" ? 0 : vZm.fOpts.svgMax);
 	vZm.fOpts.clsPre = (typeof vZm.fOpts.clsPre == "undefined" ? this.fTypZm : vZm.fOpts.clsPre);
 	vZm.fOpts.titlePath = (typeof vZm.fOpts.titlePath == "undefined" ? null : vZm.fOpts.titlePath);
 	if ((vZm.fOpts.mag > 0 || vZm.fOpts.titlePath) && vZm.fOpts.toolbar == 0) vZm.fOpts.toolbar = 1;
@@ -201,6 +206,15 @@ scImgMgr.registerAdaptedImage = function(pPathImage) {
 	var vImg = new Object;
 	vImg.fPath = pPathImage;
 	this.fPathImg[this.fPathImg.length] = vImg;
+}
+
+/** scImgMgr.registerSvg.
+ * @param pPathSvg scPaLib path vers les svgs.
+ */
+scImgMgr.registerSvg = function(pPathSvg) {
+	var vSvg = new Object;
+	vSvg.fPath = pPathSvg;
+	this.fPathSvg[this.fPathSvg.length] = vSvg;
 }
 
 /** register a listener. */
@@ -374,6 +388,16 @@ scImgMgr.xInitImg = function(pImg) {
 /*	if (pImg.width>this.fMaxDeviceWidth){
 		pImg.fIsAdapted = true;
 	}*/
+}
+/* === SVG manager ========================================================== */
+scImgMgr.xInitSvgs = function(pCo) {
+	for(var i=0; i<this.fPathSvg.length; i++) {
+		var vSvgs = scPaLib.findNodes(this.fPathSvg[i].fPath, pCo);
+		for(var j=0; j<vSvgs.length; j++) this.xInitSvg(vSvgs[j]);
+	}
+}
+scImgMgr.xInitSvg = function(pSvg) {
+	if (!pSvg.getAttribute("viewBox")) pSvg.setAttribute("viewBox", "0 0 " + pSvg.width.baseVal.value + " " + pSvg.height.baseVal.value);
 }
 /* === Animation manager ==================================================== */
 scImgMgr.xInitAnims = function(pCo) {
@@ -628,7 +652,7 @@ scImgMgr.xInitZm = function(pAnc) {
 	pAnc.fCvs.fAnc = pAnc;
 	pAnc.fCvs.setAttribute("role", "dialog");
 	pAnc.fCvs.onclick=function(){return scImgMgr.xClsZm(this.fAnc);}
-	pAnc.fFra = scDynUiMgr.addElement("div", pAnc.fCvs,vOpts.clsPre+"Fra", null, {visibility:"hidden"});
+	pAnc.fFra = scDynUiMgr.addElement("div", pAnc.fCvs,vOpts.clsPre+"Fra", null, {visibility:vOpts.type == "svg" ? "" : "hidden"});
 	pAnc.fFra.onclick=function(pEvt){
 		var vEvt = scImgMgr.xGetEvt(pEvt);
 		vEvt.cancelBubble = true;
@@ -645,6 +669,16 @@ scImgMgr.xInitZm = function(pAnc) {
 		vCo.fOvr.fAnc = pAnc;
 		vCo.fOvr.onclick=function(){return scImgMgr.xClsZm(this.fAnc);}
 		vCo.fOvr.style.cursor = "pointer";
+	} else if (vOpts.type == "svg"){
+		vImg = vCo.fImg = scPaLib.findNode("des:svg", pAnc).cloneNode(true);
+		vCo.appendChild(vImg);
+		vImg.fAnc = pAnc;
+		pAnc.fDefHeight = vImg.height.baseVal.value * (vOpts.svgMax==1 ? 1000 : 0);
+		pAnc.fDefWidth = vImg.width.baseVal.value * (vOpts.svgMax==1 ? 1000 : 0);
+		if (!vImg.getAttribute("viewBox")) vImg.setAttribute("viewBox", "0 0 " + vImg.width.baseVal.value + " " + vImg.height.baseVal.value);
+		pAnc.fRatio = pAnc.fDefWidth/pAnc.fDefHeight;
+		pAnc.fDeltaHeight = scImgMgr.xGetEltHeight(pAnc.fFra) - scImgMgr.xGetEltHeight(pAnc.fCo) + scCoLib.toInt(scImgMgr.xReadStyle(pAnc.fCvs,"paddingTop")) + scCoLib.toInt(scImgMgr.xReadStyle(pAnc.fCvs,"paddingBottom"));
+		pAnc.fDeltaWidth = scImgMgr.xGetEltWidth(pAnc.fFra) - scImgMgr.xGetEltWidth(pAnc.fCo) + scCoLib.toInt(scImgMgr.xReadStyle(pAnc.fCvs,"paddingLeft")) + scCoLib.toInt(scImgMgr.xReadStyle(pAnc.fCvs,"paddingRight"));
 	} else {
 		var vAddMag = vOpts.mag > 0;
 		if (!vAddMag){
@@ -703,7 +737,7 @@ scImgMgr.xOpenZm = function(pAnc) {
 	if(this.xReadStyle(pAnc.fCvs,"position") == "absolute") window.scroll(0,0); // if position:absolute, we must scroll the SS into view.
 	scImgMgr.fadeInTask.initTask(pAnc);
 	scTiLib.addTaskNow(scImgMgr.fadeInTask);
-	if(pAnc.fCo && !pAnc.fCo.fImg.src) pAnc.fCo.fImg.setAttribute("src", pAnc.fZmUri);
+	if(pAnc.fCo && !pAnc.fCo.fImg.src && pAnc.fOpts.type!="svg") pAnc.fCo.fImg.setAttribute("src", pAnc.fZmUri);
 	else scImgMgr.xRedrawZm(pAnc);
 	scImgMgr.fCurrItem = pAnc;
 	pAnc.fKeyUpOld = document.onkeyup;
@@ -845,8 +879,8 @@ scImgMgr.xRedrawZm = function(pAnc) {
 		var vNewWidth = 0;
 		if (pAnc.fRatio <= vCoRatio && vCoHeight < pAnc.fDefHeight) vNewHeight = vCoHeight;
 		if (pAnc.fRatio >= vCoRatio && vCoWidth < pAnc.fDefWidth) vNewWidth = vCoWidth;
-		vImg.style.width = (vNewWidth>0 ? scCoLib.toInt(vNewWidth)+"px" : "");
-		vImg.style.height = (vNewHeight>0 ? scCoLib.toInt(vNewHeight)+"px" : "");
+		vImg.style.width = (vNewWidth>0 ? scCoLib.toInt(vNewWidth)+"px" : "auto");
+		vImg.style.height = (vNewHeight>0 ? scCoLib.toInt(vNewHeight)+"px" : "auto");
 		var vImgHeight = pAnc.fCurrHeight = scCoLib.toInt(vNewHeight > 0 ? vNewHeight : vNewWidth > 0 ? vNewWidth/pAnc.fRatio : pAnc.fDefHeight);
 		var vImgWidth = pAnc.fCurrWidth = scCoLib.toInt(vNewWidth > 0 ? vNewWidth : vNewHeight > 0 ? vNewHeight*pAnc.fRatio : pAnc.fDefWidth);
 		vCo.style.width = vImgWidth+"px";

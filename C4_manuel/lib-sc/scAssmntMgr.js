@@ -77,7 +77,10 @@ var scAssmntMgr = {
 	gmcqInitUi : function(pId){
 		try{
 			var vMgr = window[pId];
+			var vImg = scPaLib.findNodes("ide:"+pId+"_form/des:img")[0];
 			vMgr.fImg = scPaLib.findNodes("ide:"+pId+"_form/des:img")[1];
+			vMgr.fImg.width = vImg.width;
+			vMgr.fImg.height = vImg.height;
 			vMgr.fAreas = scPaLib.findNodes("ide:"+pId+"_form/des:area");
 			vMgr.fInputs = scPaLib.findNodes("ide:"+pId+"_form/des:input");
 			vMgr.fRows = scPaLib.findNodes("ide:"+pId+"_form/des:tr");
@@ -91,7 +94,7 @@ var scAssmntMgr = {
 					this.xGmcqInitMarker(vSelectBox, vMgr);
 				}
 			} else {
-				vMgr.fSelectBoxes = scPaLib.findNodes("ide:"+pId+"_form/des:span");
+				vMgr.fSelectBoxes = scPaLib.findNodes("ide:"+pId+"_form/chi:div/des:span");
 				for(var i=0; i<vMgr.fSelectBoxes.length; i++){
 					var vSelectBox = vMgr.fSelectBoxes[i];
 					this.setMode(vSelectBox, "invisible");

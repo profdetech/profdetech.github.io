@@ -63,7 +63,7 @@ var tplMgr = {
 	fClickScrollJump : 20,
 	fIsIOS : /iphone|ipad|ipod/i.test(navigator.userAgent.toLowerCase()),
 	fIsAndroid: /android/i.test(navigator.userAgent.toLowerCase()),
-	fListeners : {scrollPage:[]},
+	fListeners : {scrollPage:[],slideMode:[]},
 	fStrings : ["Ouvrir le menu","Fermer le menu",
 		/*02*/    "Afficher les informations","Cacher les informations",
 		/*04*/    "défilement haut","Faire défiler le menu vers le haut",
@@ -86,7 +86,7 @@ var tplMgr = {
 	init : function(){
 		try{
 			var vHash = window.location.hash;
-			if (vHash.length>0); vHash = vHash.substring(1);
+			if (vHash.length>0) vHash = vHash.substring(1);
 			this.fContent = scPaLib.findNode(this.fContentPath);
 			this.fContent.style.position = "relative";
 			this.fContent.addEventListener("scroll", function(pEvt){
@@ -186,51 +186,51 @@ var tplMgr = {
 					var vSrlUp = this.fSrlUp = scDynUiMgr.addElement("div", vMenu.parentNode, "mnuSrlUpFra", vMenu);
 					vSrlUp.ontouchstart = function(){
 						this.fIsTouched = true;
-					}
+					};
 					vSrlUp.onclick = function(){
 						this.fIsTouched = false;
-					}
+					};
 					vSrlUp.onmouseover = function(){
 						if (this.fIsTouched) return;
 						if(tplMgr.scrollTask.fSpeed >= 0) {
 							tplMgr.scrollTask.fSpeed = -tplMgr.fHoverScrollSpeed;
 							scTiLib.addTaskNow(tplMgr.scrollTask);
 						}
-					}
+					};
 					vSrlUp.onmouseout = function(){
 						if (this.fIsTouched) return;
 						tplMgr.scrollTask.fSpeed = 0;
-					}
+					};
 					var vSrlUpBtn = this.xAddBtn(vSrlUp, "mnuSrlUpBtn", this.fStrings[4], this.fStrings[5]);
 					vSrlUpBtn.setAttribute("aria-hiden", "true");
 					vSrlUpBtn.onclick = function(){
 						tplMgr.scrollTask.step(-tplMgr.fClickScrollJump);
 						return false;
-					}
+					};
 					var vSrlDwn = this.fSrlDwn = scDynUiMgr.addElement("div", vMenu.parentNode, "mnuSrlDwnFra", vMenu);
 					vSrlDwn.ontouchstart = function(){
 						this.fIsTouched = true;
-					}
+					};
 					vSrlDwn.onclick = function(){
 						this.fIsTouched = false;
-					}
+					};
 					vSrlDwn.onmouseover = function(){
 						if (this.fIsTouched) return;
 						if(tplMgr.scrollTask.fSpeed <= 0) {
 							tplMgr.scrollTask.fSpeed = tplMgr.fHoverScrollSpeed;
 							scTiLib.addTaskNow(tplMgr.scrollTask);
 						}
-					}
+					};
 					vSrlDwn.onmouseout = function(){
 						if (this.fIsTouched) return;
 						tplMgr.scrollTask.fSpeed = 0;
-					}
+					};
 					var vSrlDwnBtn = this.xAddBtn(vSrlDwn, "mnuSrlDwnBtn", this.fStrings[6], this.fStrings[7]);
 					vSrlDwnBtn.setAttribute("aria-hiden", "true");
 					vSrlDwnBtn.onclick = function(){
 						tplMgr.scrollTask.step(tplMgr.fClickScrollJump);
 						return false;
-					}
+					};
 					this.scrollTask.checkBtn();
 					scSiLib.addRule(vMenu, this.scrollTask);
 					vMenu.onscroll = function(){tplMgr.scrollTask.checkBtn()};
@@ -275,7 +275,7 @@ var tplMgr = {
 			// HASH listener
 			window.addEventListener("hashchange", function(pEvt){
 				var vHash = window.location.hash;
-				if (vHash.length>0); vHash = vHash.substring(1);
+				if (vHash.length>0) vHash = vHash.substring(1);
 				//scCoLib.log("tplMgr.hashchange : "+vHash);
 				var vAnchor = sc$(vHash);
 				if (vAnchor){
@@ -331,7 +331,7 @@ var tplMgr = {
 					onResizedDes : function(pOwnerNode, pEvent) {
 						if(pEvent.phase==1) return;
 						tplMgr.updateMatchBaskets();
-					},
+					}
 				});
 				for (var i=0; i<this.MatchBaskets.length; i++) {
 					var vMatchBasket = this.MatchBaskets[i];
@@ -388,7 +388,7 @@ var tplMgr = {
 			for (var i=0; i<vFrames.length; i++) {
 				var vFrame = vFrames[i];
 				var vSrc = vFrame.getAttribute("src");
-				if (vSrc.indexOf("http:")==0) vFrame.src = "data:text/html;charset=utf-8," + encodeURIComponent('<html style="font-family:Sans-serif;height:100%;"><head></head><body style="position:absolute;top:0;left:0;right:0;bottom:0;box-shadow:inset 0 0 50px #e39595;margin:0;"><p style="position:absolute;top:30%;left:10%;right:10%;text-align:center;color:gray;"><em>'+this.fStrings[16].replace('%s', '<a target="_blank" href="'+vSrc+'">'+vSrc+'<a>')+'<br/><br/>'+this.fStrings[17]+'</em></p></body></html>');
+				if (vSrc.indexOf("http:")==0) vFrame.src = "data:text/html;charset=utf-8," + encodeURIComponent('<html style="font-family:sans-serif;height:100%;"><head></head><body style="position:absolute;top:0;left:0;right:0;bottom:0;box-shadow:inset 0 0 50px #e39595;margin:0;"><p style="position:absolute;top:30%;left:10%;right:10%;text-align:center;color:gray;"><em>'+this.fStrings[16].replace('%s', '<a target="_blank" href="'+vSrc+'">'+vSrc+'<a>')+'<br/><br/>'+this.fStrings[17]+'</em></p></body></html>');
 			}
 		}
 	},
@@ -404,7 +404,7 @@ var tplMgr = {
 		//scCoLib.log("updateMatchBaskets");
 		for (var i=0; i<this.MatchBaskets.length; i++) {
 			var vBasket = this.MatchBaskets[i];
-			vBasketOffset = this.xGetOffsetTop(vBasket, this.fContent);
+			var vBasketOffset = this.xGetOffsetTop(vBasket, this.fContent);
 			if (isNaN(vBasketOffset)) break;
 			var vScrollTop = this.fContent.scrollTop;
 			var vContentHeight = this.fContent.clientHeight;
@@ -458,8 +458,7 @@ var tplMgr = {
 		if (this.fSldMode == true) {
 			sessionStorage.setItem('sldMode', false);
 			window.location.reload();
-		}
-		else {
+		} else {
 			if (scPaLib.checkNode(".floatMenu", document.body)){
 				this.fMenuOpen = true;
 				this.toggleMenu();
@@ -495,6 +494,7 @@ var tplMgr = {
 			postscriptumMgr.addLoadMask(tplMgr.fContent.parentNode);
 			postscriptumMgr.init([ 'cp-slideshow' ], initSldMode);
 			if (!mathjaxMgr.isReady()) mathjaxMgr.register(initSldMode);
+			this.fireEvent("slideMode", true);
 		}
 	},
 	registerListener : function(pListener, pFunc){
@@ -696,4 +696,4 @@ ScSiRuleEnsureVisible.prototype = {
 	},
 	loadSortKey : "SiZ",
 	ruleSortKey : "Z"
-}
+};

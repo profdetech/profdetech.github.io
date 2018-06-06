@@ -71,7 +71,7 @@
 					}
 				});
 
-				if (vTime !== null) pCtrl.media.currentTime = vTime;
+				if (vTime !== null && vTime != pCtrl.media.currentTime) pCtrl.media.currentTime = vTime;
 
 				if (vState == 'play') pCtrl.media.play();
 				else if (vState == 'pause') pCtrl.media.pause();
