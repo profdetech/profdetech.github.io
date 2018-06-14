@@ -32,6 +32,7 @@ Pour les Ã©lÃ¨ves: allez sur le moodle du collÃ¨ge.
 
 [Robot aspirateur](https://profdetech.github.io/C4_robot_aspi/)
 
+[communication numérique - réseau](https://profdetech.github.io/C4_num/)
 
 # Pour les plus rapide ou aller plus loin :
 
