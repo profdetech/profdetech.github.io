@@ -3,8 +3,10 @@ var mathjaxMgr = {
 	// See: http://docs.mathjax.org/en/latest/options
 	fConfig_MathMenu : '{showLocale:false, showRenderer:false}',
 	fConfig_menuSettings : '{zoom:"Double-Click", mpContext:true, mpMouse:true}',
+	fConfig_extentions : '["tex2jax.js","mml2jax.js","MathML/content-mathml.js","MathMenu.js","MathZoom.js","fast-preview.js","AssistiveMML.js"]',
 	fConfig_SVG : '{}',
 	fConfig_TeX : '{extensions:["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js","color.js"]}',
+	fConfig_Extras : '',
 	fForceSansSerif : false,
 	fCallbacks : [],
 	fFinished : [],
@@ -36,7 +38,7 @@ var mathjaxMgr = {
 				vScript.src  = scServices.scLoad.resolveDestUri("/lib-md/w_mathjax/MathJax.js?locale=fr");
 				var vConfig = 'MathJax.Hub.Config({';
 				vConfig +=    '  jax: ["input/MathML","input/TeX","output/SVG"],';
-				vConfig +=    '  extensions: ["tex2jax.js","mml2jax.js","MathML/content-mathml.js","MathMenu.js","MathZoom.js","fast-preview.js","AssistiveMML.js"],';
+				vConfig +=    '  extensions: ' + this.fConfig_extentions + ',';
 				vConfig +=    '  imageFont: null,';
 				vConfig +=    '  webFont: "TeX",';
 				vConfig +=    '  menuSettings: ' + this.fConfig_menuSettings + ',';
@@ -57,6 +59,7 @@ var mathjaxMgr = {
 					vConfig +=    '  VARIANT["-tex-mathit"].fonts.unshift("MathJax_SansSerif-italic");';
 					vConfig +=    '});';
 				}
+				vConfig += this.fConfig_Extras;
 				if (window.opera) {vScript.innerHTML = vConfig}
 				else {vScript.text = vConfig}
 	
@@ -77,4 +80,3 @@ var mathjaxMgr = {
 		}
 	}
 }
-

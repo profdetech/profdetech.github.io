@@ -48,6 +48,7 @@ var scTooltipMgr = {
 	fFixType : "win",
 	fTtHPos : null,
 	fTtVPos : null,
+	fMakeListeners : new Array(),
 	fShowListeners : new Array(),
 	fHideListeners : new Array(),
 	fHideBasket : true,
@@ -128,6 +129,8 @@ var scTooltipMgr = {
 		if (pNode.fOpt.FORCESTICKY) pNode.ttFSticky = true;
 		pNode.fOpt.STICKY = pNode.fOpt.STICKY || (pNode.ttFSticky || false);
 		if(!pNode.fOpt.STICKY) pNode.onmouseout = this.hideTooltip;
+
+		for(var i=0; i<this.fMakeListeners.length; i++) try{this.fMakeListeners[i](pNode);}catch(e){};
 		return(pNode.ttId);
 	},
 	xShow: function(pEvt, pId, pOpt) {
@@ -419,14 +422,15 @@ var scTooltipMgr = {
 		var vCont = this.xGetElt(pId);
 		if (vCont) {
 			var vMaxX = this.xInt((this.fDb && this.fDb.clientWidth)? this.fDb.clientWidth : window.innerWidth)+this.xInt(window.pageXOffset || (this.fDb? this.fDb.scrollLeft : 0) || 0);
+			var vTt = vCont.firstChild;
+			while(vTt && vTt.nodeType != 1) vTt = vTt.nextSibling;
+			vTt.style.width = '';
 			vCont.style.width = vMaxX ? vMaxX + 'px' : '';
 			vCont.style.height = '';
 			vCont.style.top = '';
 			vCont.style.left = '';
 			var vMaxW = pOpt.MAXWIDTH;
 			var vMaxH = pOpt.MAXHEIGHT;
-			var vTt = vCont.firstChild;
-			while(vTt && vTt.nodeType != 1) vTt = vTt.nextSibling;
 			var vTtScrol = this.xGetElt(pId+'Scrol');
 			var vTtW = this.xGetEltW(vTt);
 			if (vTtW > vMaxW) { //Fix max width if needed
@@ -636,6 +640,7 @@ var scTooltipMgr = {
 			scCoLib.log("scTooltipMgr.registerTooltip - error : "+e);
 		}
 	},
+	addMakeListener: function(pFunc) {this.fMakeListeners.push(pFunc)},
 	addShowListener: function(pFunc) {this.fShowListeners.push(pFunc)},
 	addHideListener: function(pFunc) {this.fHideListeners.push(pFunc)},
 	showTooltip: function(pNode, pEvt, pCo, pTi, pCls, pClsRoot, pOpt) {
