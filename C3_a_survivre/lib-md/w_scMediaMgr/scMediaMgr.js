@@ -73,12 +73,9 @@ var scMediaMgr = {
 		try {
 			if (typeof pMediaPath != "undefined") this.fMediaPath = pMediaPath;
 
-			this.fOpts = (typeof pOpts == "undefined" ? { isSkinInWidget: false, isFlashFallback: false, processYoutubeUrls: false } : pOpts);
-			this.fOpts.isSkinInWidget = (typeof this.fOpts.isSkinInWidget == "undefined" ? false : this.fOpts.isSkinInWidget);
+			this.fOpts = (typeof pOpts == "undefined" ? { isFlashFallback: false, processYoutubeUrls: false } : pOpts);
 			this.fOpts.isFlashFallback = (typeof this.fOpts.isFlashFallback == "undefined" ? false : this.fOpts.isFlashFallback);
 			this.fProcessYoutubeUrls = this.fProcessYoutubeUrls != null ? this.fProcessYoutubeUrls : this.fOpts.processYoutubeUrls || false;
-
-			this.fSkinRelPath = this.fOpts.isSkinInWidget ? scServices.scLoad.resolveDestUri("/lib-md/w_scMediaMgr") : scServices.scLoad.resolveDestUri("/skin");
 
 			// WebBrowser Type
 			var vWebBrowser = this.xGetWebBrowser();
@@ -190,7 +187,7 @@ var scMediaMgr = {
 		}
 		if (pType == 'video') {
 			pMedia.fContainer.style.maxWidth = pMedia.fWidth ? pMedia.fWidth + "px" : pMedia.fMaxWidth ? pMedia.fMaxWidth + "px" : pMedia.fContainer.getAttribute("width") + "px";
-			pMedia.fContainer.style.maxHeight = pMedia.fHeight ? "auto" : pMedia.fMaxHeight ? pMedia.fMaxHeight + "px" : pMedia.fContainer.getAttribute("height") + "px";
+			pMedia.fContainer.style.maxHeight = pMedia.fHeight ? pMedia.fHeight + "px" : pMedia.fMaxHeight ? pMedia.fMaxHeight + "px" : pMedia.fContainer.getAttribute("height") + "px";
 			pMedia.fContainer.setAttribute("width", "100%");
 			pMedia.fContainer.setAttribute("height", "auto");
 			pMedia.fContainer.style.width = "100%";
@@ -217,6 +214,13 @@ var scMediaMgr = {
 			// Le onerror ne marche pas sur la balise source sur IE
 			// pMedia.fContainer.childNodes[vSources.length-1].onerror = function(){scMediaMgr.xCreateFlashFallback(pMedia);};
 			pMedia.fContainer.onerror = function () { scMediaMgr.xCreateFlashFallback(pMedia); };
+		}
+
+		// Création bouton sur la vidéo permettant de lancer la vidéo en cliquant sur la vidéo
+		if (pMedia.fType == "video") {
+			pMedia.fPlayOnScreenBtn = this.xAddBtn(pMedia.fParent, "playOnScreen", this.fStrings[19], this.fStrings[19]);
+			pMedia.fPlayOnScreenBtn.media = pMedia;
+			pMedia.fPlayOnScreenBtn.onclick = this.sPlayPause;	
 		}
 
 		// Création du lecteur et des boutons par défaut du lecteur
@@ -340,6 +344,14 @@ var scMediaMgr = {
 			if (!scMediaMgr.fNavie9) {
 				pMedia.fSeekBtn.max = scCoLib.toInt(this.duration);
 				pMedia.fSeekBtn.setAttribute("aria-valuemax", scCoLib.toInt(this.duration));
+			}
+			if (pMedia.fPlayOnScreenBtn) {
+				pMedia.fPlayOnScreenBtn.style.width = pMedia.fContainer.offsetWidth + "px";
+				// Sous IE 11 si on ne met pas de top et de left le bouton n'est pas centré sur la vidéo
+				pMedia.fPlayOnScreenBtn.style.marginLeft = -pMedia.fContainer.offsetWidth / 2 + "px";
+				pMedia.fPlayOnScreenBtn.style.top = 0;
+				pMedia.fPlayOnScreenBtn.style.left = "50%";
+				pMedia.fPlayOnScreenBtn.style.height = pMedia.fContainer.offsetHeight + "px";
 			}
 			scMediaMgr.xNotifyListener("mediaLoaded", this);
 		}, false);
@@ -499,6 +511,8 @@ var scMediaMgr = {
 			pBtn.title = this.fStrings[19];
 			pBtn.setAttribute("aria-label", this.fStrings[19]);
 			pBtn.span.className = pBtn.span.className.replace("pause", "play");
+			if (pBtn == pBtn.media.fPlayOnScreenBtn && pBtn.media.fPlayOnScreenBtn) pBtn.media.fPlayBtn.span.className = pBtn.media.fPlayBtn.span.className.replace("pause", "play");
+			if (pBtn == pBtn.media.fPlayBtn && pBtn.media.fPlayOnScreenBtn) pBtn.media.fPlayOnScreenBtn.span.className = pBtn.media.fPlayOnScreenBtn.span.className.replace("pause", "play");
 			pBtn.media.fContainer.paused = true;
 			if (pBtn.media.isFlash) pBtn.media.fContainer.SetVariable("method:pause", "");
 			else pBtn.media.fContainer.pause();
@@ -507,6 +521,8 @@ var scMediaMgr = {
 			pBtn.title = this.fStrings[18];
 			pBtn.setAttribute("aria-label", this.fStrings[18]);
 			pBtn.span.className = pBtn.span.className.replace("play", "pause");
+			if (pBtn == pBtn.media.fPlayOnScreenBtn && pBtn.media.fPlayOnScreenBtn) pBtn.media.fPlayBtn.span.className = pBtn.media.fPlayBtn.span.className.replace("play", "pause");
+			if (pBtn == pBtn.media.fPlayBtn && pBtn.media.fPlayOnScreenBtn) pBtn.media.fPlayOnScreenBtn.span.className = pBtn.media.fPlayOnScreenBtn.span.className.replace("play", "pause");
 			pBtn.media.fContainer.paused = false;
 			if (pBtn.media.isFlash) pBtn.media.fContainer.SetVariable("method:play", "");
 			else pBtn.media.fContainer.play();

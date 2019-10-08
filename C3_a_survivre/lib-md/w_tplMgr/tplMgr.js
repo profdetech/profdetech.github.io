@@ -51,6 +51,7 @@ var tplMgr = {
 	fStudentAreaPath : "des:div.studentArea/chi:textarea",
 	fMatchBasketPath : "des:td.mtTdBasket",
 	fLogin : null,
+	fUrlOutline : null,
 	fCbkInit : true,
 	fPageOutlineAnchors : [],
 	fPageOutlineTargets : [],
@@ -74,17 +75,22 @@ var tplMgr = {
 		/*14*/    "Diaporama","Active la consultation du contenu en mode diaporama",
 		/*16*/    'Ouvrir le contenu distant \"%s\" dans une nouvelle fenêtre.',"Un contenu non sécurisé (http) ne peut être embarqué dans une page sécurisée (https).",
 		/*18*/    "Votre navigateur ne permet pas de visualiser des PDF directement dans une page web. Pour le visualiser : ","cliquez ici",
+		/*20*/    "Afficher","Cacher",
+		/*22*/    "Ouvrir","Fermer",
 		""],
 
 	controlLogin : function(pLogin){
 		var vSavedCode = sessionStorage.getItem("code");
 		if (pLogin.code != vSavedCode) {
 			sessionStorage.setItem("page", window.location);
-			window.location = pLogin.url;
+			var vUrl = pLogin.url;
+			setTimeout(function(){window.location=vUrl}, 1); //https://crbug.com/977520
 		}
 	},
 	init : function(){
 		try{
+			this.fPageCurrent = scServices.scLoad.getUrlFromRoot(scCoLib.hrefBase());
+			this.fStore = new LocalStore();
 			var vHash = window.location.hash;
 			if (vHash.length>0) vHash = vHash.substring(1);
 			this.fContent = scPaLib.findNode(this.fContentPath);
@@ -132,18 +138,10 @@ var tplMgr = {
 					var vLnkHist = vLnkHists[i];
 					vLnkHist.onclick = function(){
 						var vId = this.id || this.parentNode.id;
-						var vHref = (vId ?  scCoLib.hrefBase() + "#" + vId : window.location.href);
-						if (tplMgr.fLinkHistory.length==0 || vHref != tplMgr.fLinkHistory[0].href) tplMgr.fLinkHistory.unshift({title:scPaLib.findNode("des:h1/chi:span").textContent, href:vHref});
-						sessionStorage.setItem("linkHistory", JSON.stringify(tplMgr.fLinkHistory));
+						tplMgr.setHistory(vId ?  scCoLib.hrefBase() + "#" + vId : window.location.href);
 					}
 				}
-				for (var i=0; i<this.fLinkHistory.length; i++) {
-					if (window.location.href == this.fLinkHistory[i].href){
-						this.fLinkHistory.splice(0, i+1);
-						sessionStorage.setItem("linkHistory", JSON.stringify(tplMgr.fLinkHistory));
-						break;
-					}
-				}
+				this.resetHistory(window.location.href);
 				if (this.fLinkHistory.length>0){
 					var vBackButton = scDynUiMgr.addElement("button", scPaLib.findNode(this.fHeaderPath), "backBtn");
 					vBackButton.onclick = function(){window.location.assign(tplMgr.fLinkHistory[0].href)};
@@ -362,7 +360,7 @@ var tplMgr = {
 		for (var i=0; i<vGaps.length; i++) {
 			var vGap = vGaps[i];
 			vGap.fSizeSpan = scDynUiMgr.addElement("span", vGap.parentNode, "gapSize", null, {visibility:"hidden", position:"absolute", left:"-10000px", top:"-10000px"});
-			vGap.fWidth = 10 * vGap.getAttribute("size");
+			vGap.fWidth = 10 * Math.min(Math.max(2, vGap.getAttribute("size")), vGap.className.indexOf("proportional")>=0 ? 30 : (vGap.className.indexOf("exoInput") >=0 ? 20 : 15));
 			function resizeForText(vText, vGap) {
 				vGap.fSizeSpan.textContent = vText;
 				vGap.style.width = Math.max(vGap.fSizeSpan.clientWidth, vGap.fWidth) + "px";
@@ -435,6 +433,33 @@ var tplMgr = {
 		this.fMenuRule.updateNode(vTarget.fAnchor);
 		//window.location = scCoLib.hrefBase() + "#" + vTarget.id;
 	},
+	declareOutline : function(pUrl){
+		scCoLib.util.log("tplMgr.declareOutline: "+pUrl);
+		this.fUrlOutline = pUrl;
+	},
+	getOutline : function() {
+		try{
+			if (!this.fOutlineSrc){
+				var vReq = this.xGetHttpRequest();
+				vReq.open("GET",this.fUrlOutline,false);
+				vReq.send();
+				this.fOutlineSrc = this.xDeserialiseObjJs(vReq.responseText);
+				var iOutlineSetup = function (pItem) {
+					if (pItem.children){
+						for (var i=0; i < pItem.children.length; i++){
+							pItem.children[i].parent = pItem;
+							iOutlineSetup(pItem.children[i]);
+						}
+					}
+				}
+				iOutlineSetup(this.fOutlineSrc.module);
+			}
+			return this.fOutlineSrc
+		}catch(e){
+			scCoLib.log("ERROR - tplMgr.getOutline : "+e);
+			// if (e.code==19) tplMgr.setNoAjax();
+		}
+	},
 	makeVisible : function(pNode){
 		// Ouvre bloc collapsable contenant pNode
 		var vCollBlk = scPaLib.findNode("anc:.collBlk_closed",pNode);
@@ -445,14 +470,16 @@ var tplMgr = {
 		if (this.fMenuOpen) this.xSwitchClass(document.body, "showMenu", "hideMenu", true);
 		else this.xSwitchClass(document.body, "hideMenu", "showMenu", true);
 		this.fMenuOpen = !this.fMenuOpen;
-		this.fToggleMenuButton.innerHTML = '<span>'+this.fStrings[(this.fMenuOpen ? 1 : 0)]+'</span>';
+		this.fToggleMenuButton.title = this.fStrings[(this.fMenuOpen ? 1 : 0)];
+		this.fToggleMenuButton.innerHTML = '<span>'+this.fStrings[(this.fMenuOpen ? 23 : 22)]+'</span>';
 		localStorage.setItem("toggleMenu", this.fMenuOpen);
 	},
 	toggleInfo : function(){
 		if (this.fInfoOpen) this.xSwitchClass(document.body, "showInfo", "hideInfo", true);
 		else this.xSwitchClass(document.body, "hideInfo", "showInfo", true);
 		this.fInfoOpen = !this.fInfoOpen;
-		this.fToggleInfoButton.innerHTML = '<span>'+this.fStrings[(this.fInfoOpen ? 3 : 2)]+'</span>';
+		this.fToggleInfoButton.title = this.fStrings[(this.fInfoOpen ? 3 : 2)];
+		this.fToggleInfoButton.innerHTML = '<span>'+this.fStrings[(this.fInfoOpen ? 21 : 20)]+'</span>';
 	},
 	toggleSldMode: function() {
 		if (this.fSldMode == true) {
@@ -505,6 +532,27 @@ var tplMgr = {
 		if (this.fListeners[pListener]) for (var i=0; i< this.fListeners[pListener].length; i++) this.fListeners[pListener][i](pParam);
 		else scCoLib.log("ERROR - tplMgr.fireEvent - non-existent listener : " + pListener);
 	},
+	/** Load page in search */
+	loadPage : function(pUrl, pDirect){
+		if (pUrl && pUrl.length>0) window.location.href = scServices.scLoad.getRootUrl() + "/" + pUrl;
+	},
+	/** scrollTo in search */
+	scrollTo : function(pId){
+		this.loadPage(this.fPageCurrent +"#" + pId, true);
+	},
+	setHistory : function(pHref) {
+		if (tplMgr.fLinkHistory.length==0 || pHref != tplMgr.fLinkHistory[0].href) tplMgr.fLinkHistory.unshift({title:scPaLib.findNode("des:h1/chi:span").textContent, href:pHref});
+		sessionStorage.setItem("linkHistory", JSON.stringify(tplMgr.fLinkHistory));
+	},
+	resetHistory : function(pHref) {
+		for (var i=0; i<this.fLinkHistory.length; i++) {
+			if (this.fLinkHistory[i].href.includes(pHref)){
+				this.fLinkHistory.splice(0, i+1);
+				sessionStorage.setItem("linkHistory", JSON.stringify(tplMgr.fLinkHistory));
+				break;
+			}
+		}
+	},
 
 	/* === Callback functions =================================================== */
 	/** Tooltip lib show callback */
@@ -517,6 +565,16 @@ var tplMgr = {
 	},
 
 	/* === Utilities ============================================================ */
+	xGetHttpRequest: function(){
+		if ("XMLHttpRequest" in window && (!this.fIsLocal || !("ActiveXObject" in window))) return new XMLHttpRequest();
+		else if ("ActiveXObject" in window) return new ActiveXObject("Microsoft.XMLHTTP");
+	},
+	xDeserialiseObjJs : function(pStr){
+		if(!pStr) return {};
+		var vVal;
+		eval("vVal="+pStr);
+		return vVal;
+	},
 	/** tplMgr.xIsContainedBy : */
 	xIsContainedBy : function(pNode, pAncestor) {
 		if (!pNode || !pAncestor) return false;
@@ -638,6 +696,32 @@ var tplMgr = {
 		ruleSortKey : "checkBtn"
 	}
 }
+
+/** Local Storage API (localStorage/userData/cookie) */
+function LocalStore(pId){
+	if (pId && !/^[a-z][a-z0-9]+$/.exec(pId)) throw new Error("Invalid store name");
+	this.fId = pId || "";
+	this.fRootKey = document.location.pathname.substring(0,document.location.pathname.lastIndexOf("/")) +"/";
+	if ("localStorage" in window && typeof window.localStorage != "undefined") {
+		this.get = function(pKey) {var vRet = localStorage.getItem(this.fRootKey+this.xKey(pKey));return (typeof vRet == "string" ? unescape(vRet) : null)};
+		this.set = function(pKey, pVal) {localStorage.setItem(this.fRootKey+this.xKey(pKey), escape(pVal))};
+	} else if (window.ActiveXObject){
+		this.get = function(pKey) {this.xLoad();return this.fIE.getAttribute(this.xEsc(pKey))};
+		this.set = function(pKey, pVal) {this.fIE.setAttribute(this.xEsc(pKey), pVal);this.xSave()};
+		this.xLoad = function() {this.fIE.load(this.fRootKey+this.fId)};
+		this.xSave = function() {this.fIE.save(this.fRootKey+this.fId)};
+		this.fIE=document.createElement('div');
+		this.fIE.style.display='none';
+		this.fIE.addBehavior('#default#userData');
+		document.body.appendChild(this.fIE);
+	} else {
+		this.get = function(pKey){var vReg=new RegExp(this.xKey(pKey)+"=([^;]*)");var vArr=vReg.exec(document.cookie);if(vArr && vArr.length==2) return(unescape(vArr[1]));else return null};
+		this.set = function(pKey,pVal){document.cookie = this.xKey(pKey)+"="+escape(pVal)};
+	}
+	this.xKey = function(pKey){return this.fId + this.xEsc(pKey)};
+	this.xEsc = function(pStr){return "LS" + pStr.replace(/ /g, "_")};
+}
+
 
 /** ### ScSiRuleEnsureVisible ######### */
 function ScSiRuleEnsureVisible(pPathNode, pPathContainer) {

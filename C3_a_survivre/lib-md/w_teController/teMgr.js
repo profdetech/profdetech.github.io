@@ -1,130 +1,111 @@
 teMgr = {
-	init: function (pSubControllers) {
-		this.subControllers = pSubControllers;
-		if (document.readyState != 'loading') {
-			this.initControllers(pSubControllers);
-		} else {
-			var vSelf = this;
+	controllers: [],
+
+	initControllers: function (elements, subControllers) {
+		var self = this;
+		if (document.readyState == 'loading') {
 			document.addEventListener('DOMContentLoaded', function () {
-				vSelf.initControllers(pSubControllers);
+				self.initControllers(elements, subControllers);
+			});
+		} else {
+			if (elements instanceof Element) elements = [ elements ];
+			else if (!(Array.isArray(elements)) && !(elements instanceof NodeList)) elements = this.queryAll(elements);
+			Array.prototype.forEach.call(elements, function (element) {
+				self.initController(element, subControllers);
 			});
 		}
-		/*
-		document.addEventListener('DOMContentLoaded', function () {
-			var v = document.querySelector('video');
-			console.log(v.readyState);
-			v.addEventListener('loadedmetadata', function () {
-				console.log(v.readyState, v.currentTime);
-
-			});
-		});
-		scOnLoads.push(this);*/
 	},
 
-	onLoad: function () {
-		this.initControllers(this.subControllers);
-	},
-
-	initControllers: function (pSubControllers) {
+	initController: function(element, subControllers) {
 		try {
-			this.controllers = this.queryAll('.teController').map(function (pElement) {
-				return new TEController(pElement, pSubControllers);
-			});
+			var ctrl = new TEController(element, subControllers);
+			this.controllers.push(ctrl);
+			return ctrl;
 		} catch (e) {
-			console.error('TEController:', e);
+			console.error('initController:', e);
 		}
 	},
 
-	getController: function (pElement) {
-		for (var vCtrl, i = 0; i < this.controllers.length, vCtrl = this.controllers[i]; i++) {
-			if (vCtrl.element == pElement || vCtrl.container == pElement || vCtrl.container.contains(pElement)) return vCtrl;
-		}
-		return null;
-	},
-
-	getSubController: function (pElement, pClass) {
-		var vCtrl = this.getController(pElement);
-		for (var vSubCtrl, i = 0; i < vCtrl.subControllers.length, vSubCtrl = vCtrl.subControllers[i]; i++) {
-			if (vSubCtrl instanceof pClass) return vSubCtrl;
+	getController: function (element) {
+		for (var ctrl, i = 0; i < this.controllers.length, ctrl = this.controllers[i]; i++) {
+			if (ctrl.element == element || ctrl.container == element || ctrl.container.contains(element)) return ctrl;
 		}
 		return null;
 	},
 
-	query: function (pClass, pContext) {
-		var vContext = pContext || document;
-		return vContext.querySelector(pClass);
+	getSubController: function (element, classNames) {
+		var ctrl = this.getController(element);
+		if (ctrl) return ctrl.getSubController(classNames);
+		return null;
 	},
 
-	queryAll: function (pClass, pContext) {
-		var vContext = pContext || document;
-		return Array.prototype.slice.call(vContext.querySelectorAll(pClass));
+	query: function (classNames, context) {
+		var context = context || document;
+		return context.querySelector(classNames);
 	},
 
-	matches: function (pElement, pClass) {
-		var vMatches = pElement.matches || pElement.msMatchesSelector;
-		return vMatches.call(pElement, pClass);
+	queryAll: function (classNames, context) {
+		var context = context || document;
+		return Array.prototype.slice.call(context.querySelectorAll(classNames));
 	},
 
-	formatTime: function (pTime) {
-		pTime = Number(pTime);
-		var vH = Math.floor(pTime / 3600);
-		var vM = Math.floor(pTime % 3600 / 60);
-		var vS = Math.floor(pTime % 3600 % 60);
-		return ((vH > 0 ? vH + ":" : "") + (vM > 0 ? (vH > 0 && vM < 10 ? "0" : "") + vM + ":" : "0:") + (vS < 10 ? "0" : "") + vS);
+	matches: function (element, classNames) {
+		var matches = element.matches || element.msMatchesSelector;
+		return matches.call(element, classNames);
 	},
 
-	getTimes: function (pTimeElts) {
-		return pTimeElts.map(function (pTimeElt) {
-			return parseFloat(pTimeElt.dataset.teTime);
-		}).sort();
+	formatTime: function (time) {
+		time = Number(time);
+		var h = Math.floor(time / 3600);
+		var m = Math.floor(time % 3600 / 60);
+		var s = Math.floor(time % 3600 % 60);
+		return ((h > 0 ? h + ":" : "") + (m > 0 ? (h > 0 && m < 10 ? "0" : "") + m + ":" : "0:") + (s < 10 ? "0" : "") + s);
 	}
 };
 
-TEController = function (pElement, pSubControllers) {
-	var vSelf = this;
+TEController = function (element, subControllers) {
+	var self = this;
 
 	this.lastTimeUpdate = NaN;
 
-	this.element = pElement;
+	this.element = element;
 	if (!this.element) throw "Temporal controller not found";
-	this.subControllers = pSubControllers;
+	this.subControllers = subControllers;
 
-	var vContainer = this.element.parentNode;
-	while (vContainer instanceof Element && !teMgr.matches(vContainer, this.element.dataset.teContainer)) {
-		vContainer = vContainer.parentNode;
+	this.queryPrefix = this.element.getAttribute('data-te-prefix') || '.te';
+
+	var container = this.element.parentNode;
+	while (container instanceof Element && !teMgr.matches(container, this.element.dataset.teContainer)) {
+		container = container.parentNode;
 	}
-	if (vContainer == document) vContainer = document.body;
-	this.container = vContainer;
+	if (container == document) container = document.body;
+	this.container = container;
 
-	var vMedia = this.media = vContainer.querySelector(this.element.dataset.teMedia || '.teMedia');
-	if (!vMedia) throw "Media not found";
+	var media = this.media = container.querySelector(this.element.dataset.teMedia || this.selector('media'));
+	if (!media) throw "Media not found";
 
-	if (vMedia.dataset.teType == 'audio' || vMedia.localName == 'audio') {
-		this.container.classList.add('teAudioType');
-	} else {
-		this.container.classList.add('teVideoType');
-	}
-	this.contentArea = vContainer.querySelector(this.element.dataset.teContentArea || '.teContentArea');
+	this.updateMediaType();
 
-	var vSeekInput = this.seekInput = this.query('seek');
-	if (vSeekInput) {
+	var seekInput = this.seekInput = this.query('seek');
+	if (seekInput) {
 		this.seekDragging = false;
-		var vSeekInputTimeout = null;
-		vSeekInput.addEventListener('input', function () {
-			vSelf.seekDragging = true;
-			if (!vSeekInputTimeout) vMedia.currentTime = parseFloat(this.value);
-			vSeekInputTimeout = setTimeout(function () {
-				vSeekInputTimeout = null;
+		var seekInputTimeout = null;
+		seekInput.addEventListener('input', function () {
+			self.seekDragging = true;
+			if (!seekInputTimeout) media.currentTime = parseFloat(this.value);
+			seekInputTimeout = setTimeout(function () {
+				seekInputTimeout = null;
 			}, 200);
 		}, false);
-		vSeekInput.addEventListener('change', function () {
-			vSelf.seekDragging = false;
-			vMedia.currentTime = parseFloat(this.value);
+		seekInput.addEventListener('change', function () {
+			self.seekDragging = false;
+			media.currentTime = parseFloat(this.value);
 		});
 	}
 
 	this.playPauseBtn = this.query('playPause');
 	if (this.playPauseBtn) this.bindButton(this.playPauseBtn, this.playPause);
+	this.bind(this.media, 'click', this.videoPlayPause);
 
 	this.nextTimeBtn = this.query('nextTime');
 	if (this.nextTimeBtn) this.bindButton(this.nextTimeBtn, this.nextTime);
@@ -138,376 +119,679 @@ TEController = function (pElement, pSubControllers) {
 	this.muteBtn = this.query('mute');
 	if (this.muteBtn) {
 		this.muteBtn.addEventListener('click', function () {
-			if (vMedia.volume == 0) vMedia.volume = 1;
-			vMedia.muted = !vMedia.muted;
+			if (media.volume == 0) media.volume = 1;
+			media.muted = !media.muted;
 		});
 	}
 	this.volumeInput = this.query('volume');
 	if (this.volumeInput) {
-		function setVolume () {
-			vMedia.volume = vSelf.volumeInput.value / 100;
-			if (vMedia.volume != 0) vMedia.muted = false;
+		function setVolume() {
+			media.volume = self.volumeInput.value / 100;
+			if (media.volume != 0) media.muted = false;
 		}
 
 		this.volumeInput.addEventListener('input', setVolume);
 		this.volumeInput.addEventListener('change', setVolume);
 	}
 
-	this.bind(vMedia, 'timeupdate', this.updateTime);
-	this.bind(vMedia, 'volumechange', this.updateVolume);
-	this.bind(vMedia, 'durationchange', this.updateDuration);
-	['loadedmetadata', 'playing', 'pause', 'ended', 'seeking', 'seeked'].forEach(function (pEvent) {
-		vSelf.bind(vMedia, pEvent, vSelf.updatePlayingState);
+	this.bind(media, 'timeupdate', this.updateTime);
+	this.bind(media, 'volumechange', this.updateVolume);
+	this.bind(media, 'loadedmetadata', this.updateMediaType);
+	this.bind(media, 'loadedmetadata', this.updateDuration);
+	this.bind(media, 'durationchange', this.updateDuration);
+	this.bind(media, 'loadedmetadata', this.updateVolume);
+	['loadedmetadata', 'playing', 'pause', 'ended', 'seeking', 'seeked'].forEach(function (event) {
+		self.bind(media, event, self.updatePlayingState);
 	});
 
-	this.segments = teMgr.queryAll(this.element.dataset.teSegments || '[data-te-start],[data-te-segment-target]', this.container);
+	var segments = teMgr.queryAll(this.element.dataset.teSegments || '[data-te-start],[data-te-segment-target]', this.container);
 	this.segmentsData = new Map();
-	for (var vSegment, i = 0; i < this.segments.length, vSegment = this.segments[i]; i++) {
-		var vTarget = vSegment.dataset.teSegmentTarget;
-		var vTargetSegment, vStart, vEnd;
-		if (vTarget) {
-			vTargetSegment = document.getElementById(vTarget);
-			vStart = parseFloat(vTargetSegment.dataset.teStart);
-			vEnd = parseFloat(vTargetSegment.dataset.teEnd);
+	for (var segment, i = 0; i < segments.length, segment = segments[i]; i++) {
+		var target = segment.dataset.teSegmentTarget;
+		var targetSegment, start, end;
+		if (target) {
+			targetSegment = document.getElementById(target);
+			start = parseFloat(targetSegment.dataset.teStart);
+			end = parseFloat(targetSegment.dataset.teEnd);
 		} else {
-			vStart = parseFloat(vSegment.dataset.teStart);
-			vEnd = parseFloat(vSegment.dataset.teEnd);
+			start = parseFloat(segment.dataset.teStart);
+			end = parseFloat(segment.dataset.teEnd);
 		}
-		this.segmentsData.set(vSegment, {start: vStart, end: vEnd});
+		this.segmentsData.set(segment, {start: start, end: end});
 	}
+	this.segments = segments.sort(function(segment1, segment2) {
+		var data1 = self.segmentsData.get(segment1);
+		var data2 = self.segmentsData.get(segment2);
+		return data1.start - data2.start;
+	});
 
-	this.points = teMgr.queryAll(this.element.dataset.tePause || '[data-te-position],[data-te-point-target]', this.container);
+	var points = teMgr.queryAll(this.element.dataset.tePause || '[data-te-position],[data-te-point-target]', this.container);
 	this.pointsData = new Map();
-	for (var vPoint, i = 0; i < this.points.length, vPoint = this.points[i]; i++) {
-		var vTarget = vPoint.dataset.tePointTarget;
-		var vTargetPoint, vPosition;
-		if (vTarget) {
-			vTargetPoint = document.getElementById(vTarget);
-			vPosition = parseFloat(vTargetPoint.dataset.tePosition);
+	for (var point, i = 0; i < points.length, point = points[i]; i++) {
+		var target = point.dataset.tePointTarget;
+		var targetPoint, position;
+		if (target) {
+			targetPoint = document.getElementById(target);
+			position = parseFloat(targetPoint.dataset.tePosition);
 		} else {
-			vPosition = parseFloat(vPoint.dataset.tePosition);
+			position = parseFloat(point.dataset.tePosition);
 		}
-		var vInteractive = vPoint.localName == 'a' || vPoint.localName == 'button' || vPoint.localName == 'input';
-		this.pointsData.set(vPoint, {position: vPosition, interactive: vInteractive});
+		var interactive = point.localName == 'a' || point.localName == 'button' || point.localName == 'input';
+		this.pointsData.set(point, {position: position, interactive: interactive});
 
-		if (vInteractive) {
-			vPoint.addEventListener('click', function () {
-				vMedia.currentTime = vSelf.pointsData.get(this).position;
-				return false;
+		if (interactive) {
+			point.addEventListener('click', function (event) {
+				media.currentTime = self.pointsData.get(this).position;
+				event.preventDefault();
 			})
 		}
 	}
+	this.points = points.sort(function(point1, point2) {
+		var data1 = self.pointsData.get(point1);
+		var data2 = self.pointsData.get(point2);
+		return data1.position - data2.position;
+	});
 
+	this.timelines = teMgr.queryAll(this.element.dataset.teTimelines || this.selector('timeline'), this.element);
+	this.previousTimelineBtn = this.query('previousTimeline');
+	this.nextTimelineBtn = this.query('nextTimeline');
+	if (this.timelines.length) {
+		if (this.previousTimelineBtn) this.bindButton(this.previousTimelineBtn, this.previousTimeline);
+		if (this.nextTimelineBtn) this.bindButton(this.nextTimelineBtn, this.nextTimeline);
+		this.selectTimeline(this.timelines[0]);
+	} else {
+		if (this.previousTimelineBtn) this.previousTimelineBtn.hidden = true;
+		if (this.nextTimelineBtn) this.nextTimelineBtn.hidden = true;
+		if (this.previousTimeBtn) this.previousTimeBtn.hidden = true;
+		if (this.nextTimeBtn) this.nextTimeBtn.hidden = true;
+	}
 
-	this.subControllers.forEach(function (pSubCtrl) {
+	if (this.subControllers) this.subControllers.forEach(function (subCtrl) {
 		try {
-			if (pSubCtrl.init) pSubCtrl.init(vSelf);
+			if (subCtrl.init) subCtrl.init(self);
 		} catch (e) {
-			console.error(pSubCtrl.constructor.name + '.init:', e);
+			console.error(subCtrl.constructor.name + '.init:', e);
 		}
 	});
 
-	this.updateActiveStates();
-
-	this.timelines = teMgr.queryAll(this.element.dataset.teTimelines || '.teTimeline', this.element);
-	if (this.timelines.length) {
-		this.previousTimelineBtn = this.query('previousTimeline');
-		if (this.previousTimelineBtn) this.bindButton(this.previousTimelineBtn, this.previousTimeline);
-		this.nextTimelineBtn = this.query('nextTimeline');
-		if (this.nextTimelineBtn) this.bindButton(this.nextTimelineBtn, this.nextTimeline);
-
-		this.selectTimeline(this.timelines[0]);
+	this.updateTime();
+	if (media.readyState >= HTMLMediaElement.HAVE_METADATA) {
+		this.updateDuration();
+		this.updateVolume();
 	}
 
-	this.updateTime();
-	this.updateVolume();
-	if (vMedia.readyState >= HTMLMediaElement.HAVE_METADATA) this.updateDuration();
+	this.subtitles = {};
+
+	this.initPressButtons();
+	function ready() {
+		container.classList.add('teReady');
+		if (self.subControllers) self.subControllers.forEach(function (subCtrl) {
+			try {
+				if (subCtrl.ready) subCtrl.ready(self);
+			} catch (e) {
+				console.error(subCtrl.constructor.name + '.ready:', e);
+			}
+		});
+	}
+	if (document.readyState == 'complete') ready();
+	else window.addEventListener('load', ready);
 
 };
 
 TEController.prototype = {
-	query: function (pClass) {
-		return teMgr.query('.te' + pClass[0].toUpperCase() + pClass.substr(1), this.element);
+	getSubController: function (classNames) {
+		for (var subCtrl, i = 0; i < this.subControllers.length, subCtrl = this.subControllers[i]; i++) {
+			if (subCtrl instanceof classNames) return subCtrl;
+		}
+		return null;
 	},
 
-	queryAll: function (pClass) {
-		return teMgr.queryAll('.te' + pClass[0].toUpperCase() + pClass.substr(1), this.element);
+	getSubControllers: function (classNames) {
+		var subCtrls = [];
+		for (var subCtrl, i = 0; i < this.subControllers.length, subCtrl = this.subControllers[i]; i++) {
+			if (subCtrl instanceof classNames) subCtrls.push(subCtrl);
+		}
+		return subCtrls;
 	},
 
-	bind: function (pElement, pEvent, pMethod) {
-		pElement.addEventListener(pEvent, pMethod.bind(this));
+	selector: function(className) {
+		return this.queryPrefix + className[0].toUpperCase() + className.substr(1);
 	},
 
-	bindButton: function (pButton, pMethod) {
-		pButton.addEventListener('click', pMethod.bind(this));
-		this.setButtonTitle(pButton, pButton.title)
+	query: function (className) {
+		return teMgr.query(this.selector(className), this.element);
 	},
 
-	dispatch: function (pEventName, pElement) {
+	queryAll: function (className) {
+		return teMgr.queryAll(this.selector(className), this.element);
+	},
+
+	bind: function (element, event, method) {
+		var binded = method.bind(this);
+		element.addEventListener(event, binded);
+		return binded;
+	},
+
+	bindButton: function (button, method) {
+		var binded = method.bind(this);
+		button.addEventListener('click', binded);
+		return binded;
+	},
+
+	dispatch: function (eventName, element) {
 		if (this.subControllers) {
 			for (var i = 0; i < this.subControllers.length; i++) {
-				var vSubCtrl = this.subControllers[i];
+				var subCtrl = this.subControllers[i];
 				try {
-					if (vSubCtrl[pEventName]) {
-						if (!pElement) vSubCtrl[pEventName](this);
-						else if (vSubCtrl.handle(pElement)) vSubCtrl[pEventName](pElement, this);
+					if (subCtrl[eventName]) {
+						if (!element) subCtrl[eventName](this);
+						else if (!subCtrl.handle || subCtrl.handle(element)) subCtrl[eventName](element, this);
 					}
 				} catch (e) {
-					console.error(vSubCtrl.constructor.name + '.' + pEventName + ':', e);
+					console.error(subCtrl.constructor.name + '.' + eventName + ':', e);
 				}
 			}
 		}
 	},
 
 	updateTime: function () {
-		var vSelf = this;
-		var vCurrentTime = this.media.currentTime;
-		var vFormattedTime = teMgr.formatTime(vCurrentTime);
+		var currentTime = this.media.currentTime;
+		var formattedTime = teMgr.formatTime(currentTime);
 
 		// Mise à jour du temps courant et du curseur de lecture
 		if (this.currentTimeLabel) {
-			this.currentTimeLabel.textContent = vFormattedTime;
+			this.currentTimeLabel.textContent = formattedTime;
 		}
-		if (!this.seekDragging) {
-			this.seekInput.value = vCurrentTime;
-			this.seekInput.setAttribute('value', vCurrentTime);
-			this.seekInput.setAttribute("aria-valuenow", vCurrentTime);
-			this.seekInput.setAttribute("aria-valuetext", vFormattedTime);
+		if (this.seekInput && !this.seekDragging) {
+			this.seekInput.value = currentTime;
+			this.seekInput.setAttribute('value', currentTime);
+			this.seekInput.setAttribute("aria-valuenow", currentTime);
+			this.seekInput.setAttribute("aria-valuetext", formattedTime);
+			this.seekInput.style.setProperty("--value", currentTime * 100 / this.media.duration + '%');
 
 		}
 
-		if (this.previousTimeBtn) this.previousTimeBtn.disabled = !this.currentTimes.length || vCurrentTime <= this.currentTimes[0];
-		if (this.nextTimeBtn) this.nextTimeBtn.disabled = !this.currentTimes.length || vCurrentTime >= this.currentTimes[this.currentTimes.length - 1];
+		if (this.currentTimeline) {
+			if (this.previousTimeBtn) this.previousTimeBtn.disabled = !this.currentTimes.length || currentTime <= this.currentTimes[0];
+			if (this.nextTimeBtn) this.nextTimeBtn.disabled = !this.currentTimes.length || currentTime >= this.currentTimes[this.currentTimes.length - 1];
+		}
 
-		this.updateActiveStates();
+		if (this.points.length || this.segments.length) this.updateStates();
 
-		this.lastTimeUpdate = vCurrentTime;
+		this.lastTimeUpdate = currentTime;
 	},
 
 	updateDuration: function () {
-		var vSelf = this;
-		var vDuration = this.media.duration;
-		if (this.durationLabel) this.durationLabel.textContent = teMgr.formatTime(vDuration);
+		var self = this;
+		var duration = this.media.duration;
+		if (duration == 0 || duration == Infinity) return;
+		if (this.durationLabel) this.durationLabel.textContent = teMgr.formatTime(duration);
 		if (this.seekInput) {
-			this.seekInput.max = vDuration;
-			this.seekInput.setAttribute("aria-valuemax", vDuration);
+			this.seekInput.max = duration;
+			this.seekInput.setAttribute("aria-valuemax", duration);
 		}
-		this.segments.forEach(function (pSegment) {
-			var vStyles = pSegment.dataset.teStyles;
-			if (vStyles) {
-				vStyles = vStyles.split(' ');
-				vStyles.forEach(function (pStyle) {
-					var vData = vSelf.segmentsData.get(pSegment);
-					if (pStyle == 'width') {
-						pSegment.style.width = ((vData.end - vData.start) * 100 / vDuration) + '%';
-					} else if (pStyle == 'left' || pStyle == 'margin-left') {
-						pSegment.style[pStyle] = (vData.start * 100 / vDuration) + '%';
+		this.segments.forEach(function (segment) {
+			var styles = segment.dataset.teStyles;
+			if (styles) {
+				styles = styles.split(' ');
+				styles.forEach(function (style) {
+					var data = self.segmentsData.get(segment);
+					if (style == 'width') {
+						segment.style.width = ((data.end - data.start) * 100 / duration) + '%';
+					} else if (style == 'left' || style == 'margin-left') {
+						segment.style[style] = (data.start * 100 / duration) + '%';
+					}
+				});
+			}
+		});
+		this.points.forEach(function (point) {
+			var styles = point.dataset.teStyles;
+			if (styles) {
+				styles = styles.split(' ');
+				styles.forEach(function (style) {
+					var data = self.pointsData.get(point);
+					if (style == 'width') point.style.width = 0;
+					else if (style == 'left' || style == 'margin-left') {
+						point.style[style] = (data.position * 100 / duration) + '%';
 					}
 				});
 			}
 		});
 	},
 
+	updateMediaType: function () {
+		var renderer = this.media.renderer || this.media;
+		var isNative = !this.media.renderer || /html5|native/i.test(this.media.rendererName);
+		if (!isNative || renderer.videoWidth || renderer.poster) {
+			this.container.classList.remove('teAudioType');
+			this.container.classList.add('teVideoType');
+		} else {
+			this.container.classList.remove('teVideoType');
+			this.container.classList.add('teAudioType');
+		}
+		if (!isNative) {
+			this.media.classList.add('teNotNative');
+		} else {
+			this.media.classList.remove('teNotNative');
+		}
+	},
+
 	updateVolume: function () {
+		if (this.fadeInterval) return;
 		if (this.muteBtn) {
 			if (this.media.muted || this.media.volume == 0) {
-				this.muteBtn.classList.add('teChecked');
-				this.setButtonTitle(this.muteBtn, this.muteBtn.dataset.teMutedTitle);
+				this.muteBtn.setAttribute('aria-pressed', true);
 			} else {
-				this.muteBtn.classList.remove('teChecked');
-				this.setButtonTitle(this.muteBtn, this.muteBtn.dataset.teMuteTitle);
+				this.muteBtn.setAttribute('aria-pressed', false);
 			}
 		}
 		if (this.volumeInput) {
-			var vVolume = this.media.muted ? 0 : this.media.volume * 100;
-			this.volumeInput.value = vVolume;
-			this.volumeInput.setAttribute('value', vVolume);
-			this.volumeInput.setAttribute("aria-valuenow", vVolume);
-			this.volumeInput.setAttribute("aria-valuetext", vVolume + "%");
+			var volume = this.media.muted ? 0 : this.media.volume * 100;
+			this.volumeInput.value = volume;
+			this.volumeInput.setAttribute('value', volume);
+			this.volumeInput.setAttribute("aria-valuenow", volume);
+			this.volumeInput.setAttribute("aria-valuetext", volume + "%");
+			this.volumeInput.style.setProperty("--value", volume + '%');
 		}
 	},
 
-	updateActiveStates: function () {
-		var vSelf = this;
-		var vCurrentTime = this.media.currentTime;
+	updateStates: function () {
+		this.dispatch('beforeUpdateState');
+		var currentTime = this.media.currentTime;
 
-		var vContentClass = this.contentArea.className;
-		var vActiveContentPoint = false;
-		var vActives = [];
-		for (var vPoint, i = 0; i < this.points.length, vPoint = this.points[i]; i++) {
-			var vData = this.pointsData.get(vPoint);
+		var toActivates = [];
 
-			if (vCurrentTime < vData.position - 0.25) {
-				if (!vPoint.classList.contains('teIdle')) {
-					vPoint.classList.remove('teActive');
-					vPoint.classList.remove('teDone');
-					vPoint.classList.add('teIdle');
-					this.dispatch( 'idle', vPoint);
+		this.currentActives = [];
+		for (var point, i = 0; i < this.points.length, point = this.points[i]; i++) {
+			var data = this.pointsData.get(point);
+
+			if (currentTime < data.position - 0.25) {
+				if (!point.classList.contains('teIdle')) {
+					point.classList.remove('teActive');
+					point.classList.remove('teDone');
+					point.classList.add('teIdle');
+					this.dispatch('idle', point);
 				}
-			} else if (vCurrentTime >= vData.position + 0.25) {
-				if (!vPoint.classList.contains('teDone')) {
-					vPoint.classList.remove('teActive');
-					vPoint.classList.remove('teIdle');
-					vPoint.classList.add('teDone');
-					this.dispatch( 'done', vPoint);
+			} else if (currentTime >= data.position + 0.25) {
+				if (!point.classList.contains('teDone')) {
+					point.classList.remove('teActive');
+					point.classList.remove('teIdle');
+					point.classList.add('teDone');
+					this.dispatch('done', point);
 				}
-			} else if (this.currentPause != vPoint &&
-				((vCurrentTime >= vData.position - 0.25 && vCurrentTime < vData.position + 0.25) ||
-				(this.lastTimeUpdate < vData.position && vCurrentTime > vData.position))) {
-				if (!vPoint.classList.contains('teActive')) {
-					vActives.push(vPoint);
+			} else if (this.currentPause != point &&
+				((currentTime >= data.position - 0.25 && currentTime < data.position + 0.25) ||
+					(this.lastTimeUpdate < data.position && currentTime > data.position))) {
+				if (!point.classList.contains('teActive')) {
+					toActivates.push(point);
 				}
-				if (this.contentArea.contains(vPoint)) vActiveContentPoint = true;
+				this.currentActives.push(point);
 			}
 		}
 
+		for (var segment, i = 0; i < this.segments.length, segment = this.segments[i]; i++) {
+			var data = this.segmentsData.get(segment);
 
-		if (vActiveContentPoint) this.contentArea.classList.add('teActivePoint');
-		else this.contentArea.classList.remove('teActivePoint');
-
-		var vActiveContentSegment = false;
-		for (var vSegment, i = 0; i < this.segments.length, vSegment = this.segments[i]; i++) {
-			var vData = this.segmentsData.get(vSegment);
-
-			if (vCurrentTime < vData.start) {
-				if (!vSegment.classList.contains('teIdle')) {
-					vSegment.classList.remove('teActive');
-					vSegment.classList.remove('teDone');
-					vSegment.classList.add('teIdle');
-					this.dispatch( 'idle', vSegment);
+			if (currentTime < data.start) {
+				if (!segment.classList.contains('teIdle')) {
+					segment.classList.remove('teActive');
+					segment.classList.remove('teDone');
+					segment.classList.add('teIdle');
+					this.dispatch('idle', segment);
 				}
-			} else if (vCurrentTime >= vData.end) {
-				if (!vSegment.classList.contains('teDone')) {
-					vSegment.classList.remove('teActive');
-					vSegment.classList.remove('teIdle');
-					vSegment.classList.add('teDone');
-					this.dispatch( 'done', vSegment);
+			} else if (currentTime >= data.end) {
+				if (!segment.classList.contains('teDone')) {
+					segment.classList.remove('teActive');
+					segment.classList.remove('teIdle');
+					segment.classList.add('teDone');
+					this.dispatch('done', segment);
 				}
 			} else {
-				if (!vSegment.classList.contains('teActive')) {
-					vActives.push(vSegment);
+				if (!segment.classList.contains('teActive')) {
+					toActivates.push(segment);
 				}
-				if (this.contentArea.contains(vSegment)) vActiveContentSegment = true;
+				this.currentActives.push(segment);
 			}
 		}
 
-		if (vActiveContentSegment) this.contentArea.classList.add('teActiveSegment');
-		else this.contentArea.classList.remove('teActiveSegment');
-
-		for (var vActive, i = 0; i < vActives.length, vActive = vActives[i]; i++) {
-			vActive.classList.remove('teIdle');
-			vActive.classList.remove('teDone');
-			vActive.classList.add('teActive');
-			this.dispatch( 'active', vActive);
+		for (var toActivate, i = 0; i < toActivates.length, toActivate = toActivates[i]; i++) {
+			toActivate.classList.remove('teIdle');
+			toActivate.classList.remove('teDone');
+			toActivate.classList.add('teActive');
+			this.dispatch('active', toActivate);
 		}
 
-		if (this.contentArea.className != vContentClass) {
-			this.dispatch( 'contentChange');
-		}
+		this.dispatch('afterUpdateState');
 	},
 
 	updatePlayingState: function () {
-		var vSelf = this;
+		var self = this;
 		if (this.media.seeking) {
 			if (!this.seekTimeout) {
+				this.container.classList.remove('tePaused');
+				this.container.classList.remove('tePlaying');
 				this.seekTimeout = setTimeout(function () {
-					if (vSelf.previousTimeBtn) vSelf.previousTimeBtn.disabled = true;
-					if (vSelf.nextTimeBtn) vSelf.nextTimeBtn.disabled = true;
+					self.container.classList.add('teSeeking');
+					if (self.previousTimeBtn) self.previousTimeBtn.disabled = true;
+					if (self.nextTimeBtn) self.nextTimeBtn.disabled = true;
 				}, 500);
 			}
 		} else {
 			clearTimeout(this.seekTimeout);
 			this.seekTimeout = null;
 			if (this.media.paused || this.media.ended) {
-				this.playPauseBtn.classList.remove('teChecked');
-				this.setButtonTitle(this.playPauseBtn, this.playPauseBtn.dataset.tePausedTitle);
+				this.container.classList.remove('teSeeking');
+				this.container.classList.remove('tePlaying');
+				this.container.classList.add('tePaused');
+				this.playPauseBtn.setAttribute('aria-pressed', false);
 			} else {
-				this.playPauseBtn.classList.add('teChecked');
-				this.setButtonTitle(this.playPauseBtn, this.playPauseBtn.dataset.tePlayingTitle);
+				this.container.classList.remove('teSeeking');
+				this.container.classList.remove('tePaused');
+				this.container.classList.add('tePlaying');
+				this.container.classList.add('tePlayed');
+				this.playPauseBtn.setAttribute('aria-pressed', true);
 			}
-		}
-		if (this.media.ended) {
-			console.log('ended', this.media.currentTime);
 		}
 	},
 
 	playPause: function () {
-		if (this.media.paused || this.media.ended) this.media.play();
-		else this.media.pause();
+		var self = this;
+
+		var fadeDuration = this.playPauseBtn.dataset.teFadeDuration;
+		if (this.media.currentTime && fadeDuration) {
+			var volume = this.media.volume;
+			var initialVolume;
+			if (this.fadeInterval) {
+				clearInterval(this.fadeInterval);
+				self.fadeInterval = null;
+				this.media.volume = volume = initialVolume = this.fadeInitialVolume;
+			} else {
+				initialVolume = this.fadeInitialVolume = volume;
+			}
+			var toPause = !this.media.paused && !this.media.end;
+			if (!toPause) {
+				this.media.volume = volume = 0;
+				this.media.play();
+			}
+			var delta = 1 / (fadeDuration / 25);
+			this.fadeInterval = setInterval(function () {
+				if (toPause && volume > 0) {
+					volume -= Math.min(delta, volume);
+					self.media.volume = volume;
+				} else if (!toPause && volume < initialVolume) {
+					volume += Math.min(delta, initialVolume - volume);
+					self.media.volume = volume;
+				} else {
+					if (toPause) self.media.pause();
+					clearInterval(self.fadeInterval);
+					self.fadeInterval = null;
+					self.updateVolume();
+					self.media.volume = initialVolume;
+				}
+			}, 25)
+		} else {
+			if (this.media.paused || this.media.ended) this.media.play();
+			else this.media.pause();
+		}
+	},
+
+	videoPlayPause: function(event) {
+		if (event.target !== this.media) return;
+
+		// Pas sur le double clic
+		if (event && event.detail > 1) {
+			clearTimeout(this.videoPlayPauseTimeout);
+			return;
+		}
+
+		var self = this;
+		var fadeDuration = this.playPauseBtn.dataset.teFadeDuration;
+		if (fadeDuration) {
+			if (this.media.paused || this.media.ended) {
+				this.container.classList.remove('tePaused');
+				this.container.classList.add('teVideoPlay');
+				setTimeout(function () {
+					self.container.classList.remove('teVideoPlay');
+				}, fadeDuration);
+			} else {
+				this.container.classList.remove('tePlaying');
+				this.container.classList.add('tePlayed');
+				this.container.classList.add('teVideoPause');
+				setTimeout(function () {
+					self.container.classList.remove('teVideoPause');
+				}, fadeDuration);
+			}
+		}
+
+		this.videoPlayPauseTimeout = setTimeout(function() {
+			self.playPauseBtn.click();
+			self.playPauseBtn.focus();
+		}, 300);
 	},
 
 	previousTime: function () {
-		var vCurrentTime = this.media.currentTime;
+		var currentTime = this.media.currentTime;
 		for (var i = this.currentTimes.length - 1; i >= 0; i--) {
-			var vTime = this.currentTimes[i];
-			if (vTime + 0.25 <= vCurrentTime) {
-				this.media.currentTime = vTime;
+			var time = this.currentTimes[i];
+			if (time + 0.25 <= currentTime) {
+				this.media.currentTime = time;
 				return;
 			}
 		}
 	},
 
 	nextTime: function () {
-		var vCurrentTime = this.media.currentTime;
+		var currentTime = this.media.currentTime;
 		for (var i = 0; i < this.currentTimes.length; i++) {
-			var vTime = this.currentTimes[i];
-			if (vTime - 0.25 >= vCurrentTime) {
-				this.media.currentTime = vTime;
+			var time = this.currentTimes[i];
+			if (time - 0.25 >= currentTime) {
+				this.media.currentTime = time;
 				return;
 			}
 		}
 	},
 
 	previousTimeline: function () {
-		var vIndex = this.timelines.indexOf(this.currentTimeline);
-		if (vIndex-- > 0) this.selectTimeline(this.timelines[vIndex]);
+		var index = this.timelines.indexOf(this.currentTimeline);
+		if (index-- > 0) this.selectTimeline(this.timelines[index]);
 	},
 
 	nextTimeline: function () {
-		var vIndex = this.timelines.indexOf(this.currentTimeline);
-		if (vIndex++ < this.timelines.length) this.selectTimeline(this.timelines[vIndex]);
+		var index = this.timelines.indexOf(this.currentTimeline);
+		if (index++ < this.timelines.length) this.selectTimeline(this.timelines[index]);
 	},
 
-	selectTimeline: function (pTimeline) {
+	selectTimeline: function (timeline) {
 		if (this.currentTimeline) this.currentTimeline.classList.remove('teCurrent');
-		this.currentTimeline = pTimeline;
+		this.currentTimeline = timeline;
 		this.currentTimeline.classList.add('teCurrent');
 		this.currentTimes = [];
-		for (var vPoint, i = 0; i < this.points.length, vPoint = this.points[i]; i++) {
-			if (this.currentTimeline.contains(vPoint)) {
-				this.currentTimes.push(this.pointsData.get(vPoint).position);
+		for (var point, i = 0; i < this.points.length, point = this.points[i]; i++) {
+			if (this.currentTimeline.contains(point)) {
+				this.currentTimes.push(this.pointsData.get(point).position);
 			}
 		}
 
-		var vIndex = this.timelines.indexOf(pTimeline);
+		var index = this.timelines.indexOf(timeline);
 		if (this.previousTimelineBtn) {
-			if (vIndex > 0) {
+			if (index > 0) {
 				this.previousTimelineBtn.disabled = false;
-				this.setButtonTitle(this.previousTimelineBtn, this.timelines[vIndex - 1].title);
+				this.previousTimelineBtn.title = this.timelines[index - 1].title;
 			} else {
 				this.previousTimelineBtn.disabled = true;
-				this.setButtonTitle(this.previousTimelineBtn, '');
+				this.previousTimelineBtn.title = '';
 			}
 		}
 		if (this.nextTimelineBtn) {
-			if (vIndex < this.timelines.length - 1) {
+			if (index < this.timelines.length - 1) {
 				this.nextTimelineBtn.disabled = false;
-				this.setButtonTitle(this.nextTimelineBtn, this.timelines[vIndex + 1].title);
+				this.nextTimelineBtn.title = this.timelines[index + 1].title;
 			} else {
 				this.nextTimelineBtn.disabled = true;
-				this.setButtonTitle(this.nextTimelineBtn, '');
+				this.nextTimelineBtn.title = '';
 			}
 		}
 
-		if (this.previousTimeBtn) this.setButtonTitle(this.previousTimeBtn, pTimeline.dataset.tePreviousTitle);
-		if (this.nextTimeBtn) this.setButtonTitle(this.nextTimeBtn, pTimeline.dataset.teNextTitle);
+		if (this.previousTimeBtn) this.previousTimeBtn.title = timeline.dataset.tePreviousTitle;
+		if (this.nextTimeBtn) this.nextTimeBtn.title = timeline.dataset.teNextTitle;
 	},
 
-	setButtonTitle: function (pButton, pTitle) {
-		pButton.setAttribute('title', pTitle);
+	showSubtitle: function (subSrc, destElt) {
+		if (!('WebVTT' in window)) throw "The subtitle feature requires vtt.js"
+		var self = this;
+		if (!(destElt instanceof Element)) destElt = this.container.querySelector(destElt);
 
-		var vSpan = pButton.querySelector('span');
-		if (!vSpan) vSpan = pButton.appendChild(document.createElement('span'));
-		vSpan.textContent = pButton.title;
+		destElt.hidden = !subSrc;
+
+		if (this.currentSubtitle) {
+			while (destElt.lastChild) destElt.removeChild(destElt.lastChild);
+			this.media.removeEventListener('timeupdate', this.currentSubtitle.listener);
+			this.currentSubtitle = null;
+		}
+
+		if (!subSrc) return;
+
+		function setSubtitle() {
+			self.currentSubtitle = subTitle;
+			self.media.addEventListener('timeupdate', subTitle.listener);
+			subTitle.listener();
+		}
+
+		var subTitle = this.subtitles[subSrc];
+		if (subTitle) setSubtitle();
+		else {
+			subTitle = this.subtitles[subSrc] = {cues: []};
+			var req = new XMLHttpRequest();
+			req.open('GET', subSrc);
+			req.onload = function () {
+				var parser = new WebVTT.Parser(window, WebVTT.StringDecoder());
+				parser.oncue = function (cue) {
+					subTitle.cues.push(cue);
+				};
+				parser.parse(req.responseText);
+				parser.flush();
+				setSubtitle();
+			};
+			req.onerror = function () {
+				console.error("Unable to load the subtitles source: " + subSrc);
+			};
+			req.send();
+
+			subTitle.listener = function () {
+				var currentCues = subTitle.cues.filter(function (cue) {
+					return cue.startTime <= self.media.currentTime && cue.endTime > self.media.currentTime;
+				});
+				if (!self.currentSubCues || self.currentSubCues.length != currentCues.length || currentCues.some(function (cue, i) {
+					return self.currentSubCues[i] != cue;
+				})) {
+					while (destElt.lastChild) destElt.lastChild.remove();
+
+					currentCues.forEach(function (cue) {
+						destElt.appendChild(WebVTT.convertCueToDOMTree(window, cue.text));
+					});
+					self.currentSubCues = currentCues;
+				}
+			};
+		}
+	},
+
+	addAudio: function (src) {
+		var self = this;
+		if (!this.addAudios) this.addAudios = {};
+		var audio = this.addAudios[src] = document.createElement('audio');
+		audio.addEventListener('loadedmetadata', function () {
+			audio.currentTime = self.media.currentTime;
+			if (!self.media.paused) audio.play();
+			audio.volume = self.media.volume;
+			audio.muted = self.media.muted;
+		});
+		self.media.addEventListener('pause', function () {
+			audio.pause();
+		});
+		self.media.addEventListener('play', function () {
+			audio.currentTime = self.media.currentTime;
+			audio.play();
+		});
+		self.media.addEventListener('volumechange', function () {
+			audio.volume = self.media.volume;
+			audio.muted = self.media.muted;
+		});
+		self.media.addEventListener('seeked', function () {
+			audio.currentTime = self.media.currentTime;
+		});
+		audio.src = src;
+		this.container.appendChild(audio);
+	},
+
+	removeAudio: function (src) {
+		if (this.addAudios[src]) this.addAudios[src].remove();
+	},
+
+	switchMedia: function (src) {
+		var self = this;
+		this.originalSrc = this.media.src;
+		var currentTime = this.media.currentTime;
+		this.media.src = src;
+
+		this.media.addEventListener('loadedmetadata', function () {
+			self.media.currentTime = currentTime;
+		});
+	},
+
+	restoreMedia: function (src) {
+		var self = this;
+		var currentTime = this.media.currentTime;
+		this.media.src = this.originalSrc;
+		this.media.addEventListener('loadedmetadata', function () {
+			self.media.currentTime = currentTime;
+		});
+	},
+
+	pressedObserver: new MutationObserver(function (records) {
+		records.forEach(function (record) {
+			var btn = record.target;
+			if (record.attributeName == 'aria-pressed') {
+				var pressed = btn.getAttribute('aria-pressed');
+				if (record.oldValue == pressed) return;
+				if (pressed == 'true') {
+					if (btn.dataset.pressedTitle) {
+						if (!btn.dataset.title) btn.dataset.title = btn.title;
+						btn.title = btn.dataset.pressedTitle;
+					}
+				} else {
+					if (btn.dataset.title) btn.title = btn.dataset.title;
+				}
+				var event = document.createEvent('Events');
+				event.initEvent('change', false, false);
+				btn.dispatchEvent(event);
+			} else if (record.attributeName == 'checked') {
+				if (btn.checked) {
+					btn.title = btn.dataset.checkedTitle;
+				} else {
+					btn.title = btn.dataset.title;
+				}
+			}
+		});
+	}),
+
+	initPressButtons: function () {
+		var self = this;
+		var buttons = this.element.querySelectorAll('[aria-pressed]');
+		Array.prototype.forEach.call(buttons, function (btn) {
+			self.initPressButton(btn);
+		});
+	},
+
+	initPressButton: function (btn) {
+		var self = this;
+		btn.addEventListener('click', function () {
+			var pressed = this.getAttribute('aria-pressed');
+			if (pressed == 'true') {
+				this.setAttribute('aria-pressed', 'false');
+			} else {
+				this.setAttribute('aria-pressed', 'true');
+			}
+		});
+		self.pressedObserver.observe(btn, {attributes: true, attributeFilter: ['aria-pressed'], attributeOldValue: true});
 	}
 };

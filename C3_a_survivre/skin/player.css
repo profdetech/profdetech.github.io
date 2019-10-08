@@ -1,91 +1,74 @@
 /* === START - PLAYER MEDIAS ================================================ */
-@font-face {
-  font-family: 'fontsmedia';
-  src: url('font/fontsmedia.eot?11121778');
-  src: url('font/fontsmedia.eot?11121778#iefix') format('embedded-opentype'),
-       url('font/fontsmedia.woff2?11121778') format('woff2'),
-       url('font/fontsmedia.woff?11121778') format('woff'),
-       url('font/fontsmedia.ttf?11121778') format('truetype'),
-       url('font/fontsmedia.svg?11121778#fontsmedia') format('svg');
-  font-weight: normal;
-  font-style: normal;
+button.hd > span[class^="icon-"]{
+	background:none;
+	width: 24px;
 }
- [class^="icon-"]:before, [class*=" icon-"]:before {
-  font-family: "fontsmedia";
-  font-style: normal;
-  font-weight: normal;
-  speak: none;
- 
-  display: inline-block;
-  text-decoration: inherit;
-  width: 1em;
-  margin-right: .2em;
-  text-align: center;
-  /* opacity: .8; */
- 
-  /* For safety - reset parent styles, that can break glyph codes*/
-  font-variant: normal;
-  text-transform: none;
- 
-  /* fix buttons height, for twitter bootstrap */
-  line-height: 1em;
- 
-  /* Animation center compensation - margins should be symmetric */
-  /* remove if not needed */
-  margin-left: .2em;
- 
-  /* you can be more comfortable with increased icons size */
-   font-size: 130%; 
- 
- 
-  /* Font smoothing. That was taken from TWBS */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
- 
-  /* Uncomment for 3D effect */
-  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
-}
- 
-.icon-muted:before { content: '\e800'; }
-.icon-mute:before { content: '\e801'; }
-.icon-fullScreen:before { content: '\e802'; }
-/*.icon-small:before { content: '\e803'; }*/
-.icon-subtitles:before { content: '\e805'; }
-.icon-audiodesc:before { content: '\e806'; margin: 0 0.3em 0 0.1em; font-size: 170%; }
-.icon-altvideo:before { content: '\e807'; margin: -0.2em 0 0; font-size: 120%; }
-.icon-transcript:before { content: '\e808'; font-size: 120%; }
-.icon-play:before { content: '\e809'; }
-.icon-pause:before { content: '\e80a'; }
-.icon-defaultvideo:before { content: '\e80b'; font-size: 155%; margin: -0.1em 0em 0 0.1em; }
-.icon-loader:before { content: '\E80F'; }
 .icon-ld:before,
 .icon-md:before,
 .icon-hd:before {
 	font-family: sans-serif;
 	font-weight: bold;
-	font-size: 120%;
+	font-size: 110%;
+	color:#cc181e;
 }
 .icon-ld:before { content: 'LD'; margin-right: 0.4em; }
 .icon-md:before { content: 'MD'; margin-right: 0.6em; }
 .icon-hd:before { content: 'HD'; margin-right: 0.4em; }
 
 
-.player_bk button span{
-	color: #BBB;
+[class^="icon-"], [class*=" icon-"]{
+	background:transparent url("img/player/icons.svg") no-repeat 0 0;
+	display: inline-block;
+	height: 18px;
+	width: 18px;
+	vertical-align: middle;
+	margin: 0 5px;
 }
-.player_bk button:not([disabled]):hover span,
-.player_bk button:not([disabled]).act_on span,
-.player_bk button:not([disabled]).btnSubDisplay_on span{
-	color: #cc181e;
-	text-shadow: 1px 1px 1px #000;
-}
+
+.player_bk button:not([disabled]):hover .icon-play { background-position:0 0; }
+.icon-play { background-position:0 -20px; }
+
+.player_bk button:not([disabled]):hover .icon-pause { background-position:0 -40px; }
+.icon-pause { background-position:0 -60px; }
+
+.player_bk button:not([disabled]):hover .icon-muted{ background-position:0 -80px; }
+.icon-muted { background-position:0 -100px; width:21px; }
+
+.player_bk button:not([disabled]):hover .icon-mute{ background-position:0 -120px; }
+.icon-mute { background-position:0 -140px; width:21px; }
+
+.player_bk button:not([disabled]):hover .icon-fullScreen{ background-position:0 -160px; }
+.icon-fullScreen { background-position:0 -180px; }
+
+.fullscreen_on .player_bk button:not([disabled]):hover .icon-fullScreen{ background-position:0 -200px; }
+.fullscreen_on .icon-fullScreen { background-position:0 -220px; }
+
+.player_bk button:not([disabled]):hover .icon-defaultvideo{ background-position:0 -240px; }
+.icon-defaultvideo { background-position:0 -260px; }
+
+/* .player_bk button:not([disabled]):hover .icon-loader{ background-position:0 -280px; } */
+.icon-loader { background-position:0 -280px; }
+
+.player_bk button:not([disabled]):hover .icon-altvideo{ background-position:0 -320px; }
+.icon-altvideo { background-position:0 -340px; }
+
+.player_bk button:not([disabled]):hover .icon-audiodesc{ background-position:0 -360px; }
+.icon-audiodesc { background-position:0 -380px; width:30px;}
+
+.player_bk button:not([disabled]):hover .icon-subtitles, .player_bk button.btnSubDisplay_on .icon-subtitles{ background-position:0 -400px; }
+.icon-subtitles { background-position:0 -420px; width: 24px; }
+
+.player_bk button:not([disabled]):hover .icon-transcript, .player_bk button.act_on .icon-transcript { background-position:0 -440px; }
+.icon-transcript { background-position:0 -460px; }
+
 .display_off {
 	display: none;
 }
 .mediaPlayer{
 	display: flex;
-    flex-direction: column;
     position: relative;
+    flex-direction: column;
+    align-items: center;
 }
 iframe.mediaPlayer {
 	margin: auto;
@@ -140,7 +123,7 @@ object.resAudio {
 	cursor:default;
 	opacity: 0.2;
 }
-div.volume_bk {
+.volume_bk {
 	width: 3.125em;
 	height: 4px;
 	cursor:pointer;
@@ -151,12 +134,12 @@ div.volume_bk {
 	box-shadow: inset 0px 4px 4px rgba(0,0,0,.6);
 	position: relative;
 }
-div.volume_value {
+.volume_value {
 	height: 4px;
 	border-radius: 20px;
 	background-color: #cc181e;
 }
-div.seek_progress {
+.seek_progress {
 	width: 13.125em;
 	margin-left: 4px;
 	cursor:pointer;
@@ -168,7 +151,7 @@ div.seek_progress {
 	box-shadow: inset 0px 4px 4px rgba(0,0,0,.6);
 	position: relative;
 }
-div.seek_value {
+.seek_value {
 	width: 0;
 	position: absolute;
 	top: 0;
@@ -176,7 +159,7 @@ div.seek_value {
 	border-radius: 20px;
 	background-color: #cc181e;
 }
-div.load_progress {
+.load_progress {
 	width: 0;
 	background-color: #fff;
 	height: 8px;
@@ -250,14 +233,14 @@ input.volume_btn[type="range"] {
 	top: -3px;
 	height: 10px;
 }
-div.time_bk {
+.time_bk {
 	display:inline-block;
 	color: #E7E7E7;
 	margin-left: 5px;
 	margin-right: 5px;
-	font-size: 13px;
+	font-size: 0.9em;
 }
-div.transcript{
+.transcript{
 	width: 630px;
 	margin: 5px auto 10px;
 	padding: 5px;
@@ -345,74 +328,61 @@ ul.qualityList a.subSelect_on{
 	display:inline-block;
 }
 /*Fullscreen Mode*/
-.fullscreen_on {
-	position: static;
-}
 .fullscreen_on video,
 .fullscreen_on object {
-	max-width: none;
-	z-index: 3;
+	max-width: none !important;
+	max-height: none !important;
+	z-index: 10000;
 	position: fixed;
-	top: 50%;
-	left: 50%;
+	top: 0;
+	left: 0;
+	margin: 0;
+	width: 100%;
+	height: 100%;
 	box-shadow: none;
 }
 .fullscreen_on .video_bk {
 	position: fixed;
-	left: 50%;
-	z-index: 3;
-	bottom: 20px;
-}
-.fullscreen_on .is_6_toolsBtn {
-	margin-left: -275px;
-}
-.fullscreen_on .is_5_toolsBtn {
-	margin-left: -262.5px;
-}
-.fullscreen_on .fullscreen_on .is_4_toolsBtn {
-	margin-left: -247.5px;
-}
-.fullscreen_on .is_3_toolsBtn {
-	margin-left: -235px;
-}
-.fullscreen_on .is_2_toolsBtn {
-	margin-left: -222.5px;
-}
-.fullscreen_on .is_1_toolsBtn {
-	margin-left: -210px;
-}
-.fullscreen_on .is_0_toolsBtn {
-	margin-left: -197.5px;
-}
-.fullscreen_on .fullScreen_btn {
-	background-position: -1039px 1px;
-}
-.fullscreen_on .fullScreen_btn:hover {
-	background-position: -1079px 1px;
-}
-.fullscreen_on .subBox {
-	z-index: 3;
-	bottom: 55px;
-}
-.fullscreen_bg {
-	background: #000000;
-	position: fixed;
-	z-index: 2;
-	top: 0;
 	left: 0;
 	bottom: 0;
 	right: 0;
+	z-index: 10001;
+}
+.fullscreen_on .seek_progress {
+	flex: 1;
+}
+.fullscreen_on .subBox {
+	z-index: 10001;
+	bottom: 35px;
+	position: fixed;
 }
 .loader_bk span {
 	display: none;
 }
 .icon-loader {
-  -moz-animation: spin 2s infinite linear;
-  -o-animation: spin 2s infinite linear;
-  -webkit-animation: spin 2s infinite linear;
   animation: spin 2s infinite linear;
   display: inline-block;
 }
+/* btn play on screen */
+.playOnScreen {
+	background: none;
+  border: none;
+  position: absolute;
+	margin-top: 5px;
+}
+.fullscreen_on .playOnScreen {
+	z-index: 10000;
+  position: fixed;
+  top: 0 !important;
+	left: 0 !important;
+	width: 100% !important;
+	height: 100% !important;
+	margin: 0 !important;
+}
+.icon-playOnScreen { background-position:0 -20px; }
+button.playOnScreen:hover .icon-pauseOnScreen { background-position:0 -60px; }
+.fullscreen_on button.playOnScreen:hover .icon-pauseOnScreen { background-position:0 1000px; }
+.icon-pauseOnScreen { background-position:0 1000px; }
 @-moz-keyframes spin {
   0% {
     -moz-transform: rotate(0deg);
@@ -489,15 +459,15 @@ ul.qualityList a.subSelect_on{
   }
 }
 @media (max-width: 650px){ 
-	div.seek_progress {
+	.seek_progress {
 		width: 5.125em;
 	}
-	div.volume_bk {
+	.volume_bk {
 		display: none;
 	}
 }
 @media (max-width: 450px){ 
-	.sepTime_bk, .totalTime_bk, div.volume_bk, div.seek_progress {
+	.sepTime_bk, .totalTime_bk, .volume_bk, .seek_progress {
 		display: none;
 	}	
 }
